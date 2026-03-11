@@ -1,0 +1,25 @@
+<app-header></app-header>
+
+<div class="selector-container">
+  <div class="selector-card">
+    <h1>Tarifas</h1>
+    <p class="subtitle">Selecciona el tipo de tarifa que deseas gestionar.</p>
+
+    <div class="section-label">Tarifa Terrestre</div>
+    <div class="actions">
+      <button type="button" class="btn primary" (click)="goTerrestre()">Nueva Tarifa Terrestre</button>
+      <button type="button" class="btn secondary" (click)="goList()">Ver Listado Terrestre</button>
+    </div>
+
+    <div class="section-label maritime">Cotizaciones Marítimas (ALCE V2)</div>
+    <div class="actions">
+      <button type="button" class="btn maritime-primary" (click)="goMaritimo()">Nueva Cotización Marítima</button>
+      <button type="button" class="btn maritime-secondary" (click)="goMaritimoList()">Ver Cotizaciones Marítimas</button>
+      <button type="button" class="btn chatbot-maritime" (click)="goChatbotMaritimo()">Chatbot Marítimo (ALCE)</button>
+    </div>
+
+    <div class="links">
+      <button type="button" class="btn link" (click)="goMenu()">Ir al menú anterior</button>
+    </div>
+  </div>
+</div>

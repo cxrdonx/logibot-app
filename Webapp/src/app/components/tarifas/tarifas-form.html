@@ -1,0 +1,275 @@
+<app-header (onReset)="onReset()" (onLogout)="onLogout()"></app-header>
+
+<div class="form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? 'Editar Tarifa' : 'Nueva Tarifa' }}</h1>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <p>Cargando...</p>
+  </div>
+
+  <form *ngIf="!loading" class="tarifa-form" (ngSubmit)="saveTarifa()">
+    <!-- Basic Information -->
+    <fieldset class="form-section">
+      <legend>Información Básica</legend>
+
+      <div class="form-group">
+        <label for="origen">Origen *</label>
+        <input
+          id="origen"
+          type="text"
+          [(ngModel)]="tarifa.origen"
+          name="origen"
+          placeholder="Ej: Puerto Quetzal"
+          required
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="destino">Destino *</label>
+        <input
+          id="destino"
+          type="text"
+          [(ngModel)]="tarifa.destino"
+          name="destino"
+          placeholder="Ej: Mixco"
+          required
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="proveedor">Proveedor *</label>
+        <input
+          id="proveedor"
+          type="text"
+          [(ngModel)]="tarifa.proveedor"
+          name="proveedor"
+          placeholder="Ej: Nixon Larios"
+          required
+          class="form-input"
+        />
+      </div>
+    </fieldset>
+
+    <!-- Financial Information -->
+    <fieldset class="form-section">
+      <legend>Información Financiera</legend>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fianza">Fianza ($)</label>
+          <input
+            id="fianza"
+            type="number"
+            [(ngModel)]="tarifa.fianza"
+            name="fianza"
+            min="0"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="dias_libres">Días Libres</label>
+          <input
+            id="dias_libres"
+            type="number"
+            [(ngModel)]="tarifa.dias_libres"
+            name="dias_libres"
+            min="0"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="estadia">Estadía ($)</label>
+          <input
+            id="estadia"
+            type="number"
+            [(ngModel)]="tarifa.estadia"
+            name="estadia"
+            min="0"
+            class="form-input"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Customs Information -->
+    <fieldset class="form-section">
+      <legend>Información Aduanal</legend>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="tramite_de_aduana_cominter">Trámite Aduana COMINTER ($)</label>
+          <input
+            id="tramite_de_aduana_cominter"
+            type="number"
+            [(ngModel)]="tarifa.tramite_de_aduana_cominter"
+            name="tramite_de_aduana_cominter"
+            min="0"
+            class="form-input"
+          />
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="condiciones_de_aduana_cominter">Condiciones Aduana COMINTER</label>
+        <textarea
+          id="condiciones_de_aduana_cominter"
+          [(ngModel)]="tarifa.condiciones_de_aduana_cominter"
+          name="condiciones_de_aduana_cominter"
+          rows="2"
+          class="form-input"
+          placeholder="Ej: HASTA 50 LINEAS..."
+        ></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="tramite_aduana">Trámite Aduana ($)</label>
+          <input
+            id="tramite_aduana"
+            type="number"
+            [(ngModel)]="tarifa.tramite_aduana"
+            name="tramite_aduana"
+            min="0"
+            class="form-input"
+          />
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="condiciones_aduana">Condiciones Aduana</label>
+        <textarea
+          id="condiciones_aduana"
+          [(ngModel)]="tarifa.condiciones_aduana"
+          name="condiciones_aduana"
+          rows="2"
+          class="form-input"
+          placeholder="Ej: HASTA 10 LINEAS..."
+        ></textarea>
+      </div>
+    </fieldset>
+
+    <!-- Custody Information -->
+    <fieldset class="form-section">
+      <legend>Información de Custodia</legend>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="custodio_comsi">Custodio COMSI ($)</label>
+          <input
+            id="custodio_comsi"
+            type="number"
+            [(ngModel)]="tarifa.custodio_comsi"
+            name="custodio_comsi"
+            min="0"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="custodio_yantarni">Custodio YANTARNI ($)</label>
+          <input
+            id="custodio_yantarni"
+            type="number"
+            [(ngModel)]="tarifa.custodio_yantarni"
+            name="custodio_yantarni"
+            min="0"
+            class="form-input"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Base Price Ranges -->
+    <fieldset class="form-section">
+      <legend>Rangos de Precio Base</legend>
+
+      <div class="rango-list">
+        <div *ngFor="let rango of tarifa.rango_base_precios; let i = index" class="rango-item">
+          <div class="rango-info">
+            <span>{{ rango.min_kg }} - {{ rango.max_kg }} kg | {{ rango.concepto }} | ${{ rango.costo }}</span>
+          </div>
+          <button type="button" class="btn-remove" (click)="removeRangoPrice(i)">
+            Eliminar
+          </button>
+        </div>
+      </div>
+
+      <div class="add-rango-section">
+        <h4>Agregar Nuevo Rango</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="min_kg">Mín KG</label>
+            <input
+              id="min_kg"
+              type="number"
+              [(ngModel)]="newRangoPrice.min_kg"
+              name="min_kg"
+              min="0"
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="max_kg">Máx KG</label>
+            <input
+              id="max_kg"
+              type="number"
+              [(ngModel)]="newRangoPrice.max_kg"
+              name="max_kg"
+              min="0"
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="costo">Costo ($)</label>
+            <input
+              id="costo"
+              type="number"
+              [(ngModel)]="newRangoPrice.costo"
+              name="costo"
+              min="0"
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="concepto">Concepto</label>
+            <input
+              id="concepto"
+              type="text"
+              [(ngModel)]="newRangoPrice.concepto"
+              name="concepto"
+              placeholder="Ej: Tarifa Base"
+              class="form-input"
+            />
+          </div>
+
+          <button type="button" class="btn-add-rango" (click)="addRangoPrice()">
+            + Agregar
+          </button>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="submit" class="btn-save">
+        {{ isEditMode ? 'Actualizar' : 'Crear' }} Tarifa
+      </button>
+      <button type="button" class="btn-cancel" (click)="cancel()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

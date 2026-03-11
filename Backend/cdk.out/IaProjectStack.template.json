@@ -1,0 +1,4101 @@
+{
+ "Resources": {
+  "AuthIaProjectUserPoolCC30A8D7": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_phone_number",
+       "Priority": 1
+      },
+      {
+       "Name": "verified_email",
+       "Priority": 2
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": false
+    },
+    "AutoVerifiedAttributes": [
+     "email"
+    ],
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "UserPoolName": "ia-project-user-pool",
+    "UsernameAttributes": [
+     "email"
+    ],
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Auth/IaProjectUserPool/Resource"
+   }
+  },
+  "AuthIaProjectUserPoolIaProjectUserPoolClient34B2E79E": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "AllowedOAuthFlows": [
+     "implicit",
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "profile",
+     "phone",
+     "email",
+     "openid",
+     "aws.cognito.signin.user.admin"
+    ],
+    "CallbackURLs": [
+     "https://example.com"
+    ],
+    "ClientName": "ia-project-client",
+    "ExplicitAuthFlows": [
+     "ALLOW_USER_PASSWORD_AUTH",
+     "ALLOW_USER_SRP_AUTH",
+     "ALLOW_REFRESH_TOKEN_AUTH"
+    ],
+    "SupportedIdentityProviders": [
+     "COGNITO"
+    ],
+    "UserPoolId": {
+     "Ref": "AuthIaProjectUserPoolCC30A8D7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Auth/IaProjectUserPool/IaProjectUserPoolClient/Resource"
+   }
+  },
+  "BackendTarifasLogisticaTable519724D2": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "origen",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "destino",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "proveedor",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "OrigenIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "origen",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "DestinoIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "destino",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "ProveedorIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "proveedor",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "RutaIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "origen",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "destino",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ],
+    "TableName": "TarifasLogistica"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/TarifasLogisticaTable/Resource"
+   }
+  },
+  "BackendCreateTarifaHandlerServiceRole1F282E2E": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/CreateTarifaHandler/ServiceRole/Resource"
+   }
+  },
+  "BackendCreateTarifaHandlerServiceRoleDefaultPolicy8E652557": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchWriteItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BackendTarifasLogisticaTable519724D2",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BackendTarifasLogisticaTable519724D2",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BackendCreateTarifaHandlerServiceRoleDefaultPolicy8E652557",
+    "Roles": [
+     {
+      "Ref": "BackendCreateTarifaHandlerServiceRole1F282E2E"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/CreateTarifaHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BackendCreateTarifaHandlerE1F71E84": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "633c0aeaf29197be642e57c14eecb1bdae019da18f4eddc8bba06df27accf1f1.zip"
+    },
+    "Description": "Create new tarifa",
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "BackendTarifasLogisticaTable519724D2"
+      }
+     }
+    },
+    "Handler": "create.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "BackendCreateTarifaHandlerServiceRole1F282E2E",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.9"
+   },
+   "DependsOn": [
+    "BackendCreateTarifaHandlerServiceRoleDefaultPolicy8E652557",
+    "BackendCreateTarifaHandlerServiceRole1F282E2E"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/CreateTarifaHandler/Resource",
+    "aws:asset:path": "asset.633c0aeaf29197be642e57c14eecb1bdae019da18f4eddc8bba06df27accf1f1",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BackendCreateTarifaHandlerLogGroup23C8A788": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "BackendCreateTarifaHandlerE1F71E84"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/CreateTarifaHandler/LogGroup/Resource"
+   }
+  },
+  "BackendReadTarifaHandlerServiceRole1C086006": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ReadTarifaHandler/ServiceRole/Resource"
+   }
+  },
+  "BackendReadTarifaHandlerServiceRoleDefaultPolicy1AE7B2A4": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BackendTarifasLogisticaTable519724D2",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BackendTarifasLogisticaTable519724D2",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BackendReadTarifaHandlerServiceRoleDefaultPolicy1AE7B2A4",
+    "Roles": [
+     {
+      "Ref": "BackendReadTarifaHandlerServiceRole1C086006"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ReadTarifaHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BackendReadTarifaHandler5DF73352": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "633c0aeaf29197be642e57c14eecb1bdae019da18f4eddc8bba06df27accf1f1.zip"
+    },
+    "Description": "Read tarifas",
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "BackendTarifasLogisticaTable519724D2"
+      }
+     }
+    },
+    "Handler": "read.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "BackendReadTarifaHandlerServiceRole1C086006",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.9"
+   },
+   "DependsOn": [
+    "BackendReadTarifaHandlerServiceRoleDefaultPolicy1AE7B2A4",
+    "BackendReadTarifaHandlerServiceRole1C086006"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ReadTarifaHandler/Resource",
+    "aws:asset:path": "asset.633c0aeaf29197be642e57c14eecb1bdae019da18f4eddc8bba06df27accf1f1",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BackendReadTarifaHandlerLogGroupAB9DA246": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "BackendReadTarifaHandler5DF73352"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ReadTarifaHandler/LogGroup/Resource"
+   }
+  },
+  "BackendUpdateTarifaHandlerServiceRoleC040F76E": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/UpdateTarifaHandler/ServiceRole/Resource"
+   }
+  },
+  "BackendUpdateTarifaHandlerServiceRoleDefaultPolicy2163E57B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BackendTarifasLogisticaTable519724D2",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BackendTarifasLogisticaTable519724D2",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BackendUpdateTarifaHandlerServiceRoleDefaultPolicy2163E57B",
+    "Roles": [
+     {
+      "Ref": "BackendUpdateTarifaHandlerServiceRoleC040F76E"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/UpdateTarifaHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BackendUpdateTarifaHandler406A06F3": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "633c0aeaf29197be642e57c14eecb1bdae019da18f4eddc8bba06df27accf1f1.zip"
+    },
+    "Description": "Update tarifa",
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "BackendTarifasLogisticaTable519724D2"
+      }
+     }
+    },
+    "Handler": "update.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "BackendUpdateTarifaHandlerServiceRoleC040F76E",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.9"
+   },
+   "DependsOn": [
+    "BackendUpdateTarifaHandlerServiceRoleDefaultPolicy2163E57B",
+    "BackendUpdateTarifaHandlerServiceRoleC040F76E"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/UpdateTarifaHandler/Resource",
+    "aws:asset:path": "asset.633c0aeaf29197be642e57c14eecb1bdae019da18f4eddc8bba06df27accf1f1",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BackendUpdateTarifaHandlerLogGroupE8FCA214": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "BackendUpdateTarifaHandler406A06F3"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/UpdateTarifaHandler/LogGroup/Resource"
+   }
+  },
+  "BackendDeleteTarifaHandlerServiceRole7BBDEABF": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/DeleteTarifaHandler/ServiceRole/Resource"
+   }
+  },
+  "BackendDeleteTarifaHandlerServiceRoleDefaultPolicyEF7C1320": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BackendTarifasLogisticaTable519724D2",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BackendTarifasLogisticaTable519724D2",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BackendDeleteTarifaHandlerServiceRoleDefaultPolicyEF7C1320",
+    "Roles": [
+     {
+      "Ref": "BackendDeleteTarifaHandlerServiceRole7BBDEABF"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/DeleteTarifaHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BackendDeleteTarifaHandlerDF408F20": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "633c0aeaf29197be642e57c14eecb1bdae019da18f4eddc8bba06df27accf1f1.zip"
+    },
+    "Description": "Delete tarifa",
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "BackendTarifasLogisticaTable519724D2"
+      }
+     }
+    },
+    "Handler": "delete.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "BackendDeleteTarifaHandlerServiceRole7BBDEABF",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.9"
+   },
+   "DependsOn": [
+    "BackendDeleteTarifaHandlerServiceRoleDefaultPolicyEF7C1320",
+    "BackendDeleteTarifaHandlerServiceRole7BBDEABF"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/DeleteTarifaHandler/Resource",
+    "aws:asset:path": "asset.633c0aeaf29197be642e57c14eecb1bdae019da18f4eddc8bba06df27accf1f1",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BackendDeleteTarifaHandlerLogGroup2167AFFE": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "BackendDeleteTarifaHandlerDF408F20"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/DeleteTarifaHandler/LogGroup/Resource"
+   }
+  },
+  "BackendChatbotTerrestreHandlerServiceRoleDDDF572A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ChatbotTerrestreHandler/ServiceRole/Resource"
+   }
+  },
+  "BackendChatbotTerrestreHandlerServiceRoleDefaultPolicyD41CFDC9": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BackendTarifasLogisticaTable519724D2",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BackendTarifasLogisticaTable519724D2",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "bedrock:InvokeModel",
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BackendChatbotTerrestreHandlerServiceRoleDefaultPolicyD41CFDC9",
+    "Roles": [
+     {
+      "Ref": "BackendChatbotTerrestreHandlerServiceRoleDDDF572A"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ChatbotTerrestreHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BackendChatbotTerrestreHandler69D8958B": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "ImageUri": {
+      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:95f1dd785033a665ad8b926601bb77c49e51b622de5324086919d01e65e0e4cc"
+     }
+    },
+    "Description": "AI chatbot terrestre using Amazon Nova Pro via Bedrock",
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "BackendTarifasLogisticaTable519724D2"
+      },
+      "REGION": {
+       "Ref": "AWS::Region"
+      },
+      "MODEL_ID": "amazon.nova-pro-v1:0"
+     }
+    },
+    "ImageConfig": {
+     "Command": [
+      "chatbot_terrestre.handler"
+     ]
+    },
+    "MemorySize": 512,
+    "PackageType": "Image",
+    "Role": {
+     "Fn::GetAtt": [
+      "BackendChatbotTerrestreHandlerServiceRoleDDDF572A",
+      "Arn"
+     ]
+    },
+    "Timeout": 60
+   },
+   "DependsOn": [
+    "BackendChatbotTerrestreHandlerServiceRoleDefaultPolicyD41CFDC9",
+    "BackendChatbotTerrestreHandlerServiceRoleDDDF572A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ChatbotTerrestreHandler/Resource",
+    "aws:asset:path": "asset.95f1dd785033a665ad8b926601bb77c49e51b622de5324086919d01e65e0e4cc",
+    "aws:asset:dockerfile-path": "Dockerfile",
+    "aws:asset:property": "Code.ImageUri"
+   }
+  },
+  "BackendChatbotTerrestreHandlerLogGroup86B71782": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "BackendChatbotTerrestreHandler69D8958B"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ChatbotTerrestreHandler/LogGroup/Resource"
+   }
+  },
+  "BackendMaritimeQuotationsTableFDF89FB0": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "origin_port",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "destination_port",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "shipping_line",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "quotation_number",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "OriginPortIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "origin_port",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "DestinationPortIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "destination_port",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "ShippingLineIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "shipping_line",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "QuotationNumberIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "quotation_number",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ],
+    "TableName": "MaritimeQuotations"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/MaritimeQuotationsTable/Resource"
+   }
+  },
+  "BackendCreateMaritimeHandlerServiceRoleEC3C1515": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/CreateMaritimeHandler/ServiceRole/Resource"
+   }
+  },
+  "BackendCreateMaritimeHandlerServiceRoleDefaultPolicy7B6031A6": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchWriteItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BackendMaritimeQuotationsTableFDF89FB0",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BackendMaritimeQuotationsTableFDF89FB0",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BackendCreateMaritimeHandlerServiceRoleDefaultPolicy7B6031A6",
+    "Roles": [
+     {
+      "Ref": "BackendCreateMaritimeHandlerServiceRoleEC3C1515"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/CreateMaritimeHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BackendCreateMaritimeHandler98B68562": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "186be61268dff57edcae11d56fe03b2a3494fa9371e405a0f3e9063a875ff9fb.zip"
+    },
+    "Description": "Create new maritime quotation (ALCE V2)",
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "BackendMaritimeQuotationsTableFDF89FB0"
+      }
+     }
+    },
+    "Handler": "create.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "BackendCreateMaritimeHandlerServiceRoleEC3C1515",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.9"
+   },
+   "DependsOn": [
+    "BackendCreateMaritimeHandlerServiceRoleDefaultPolicy7B6031A6",
+    "BackendCreateMaritimeHandlerServiceRoleEC3C1515"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/CreateMaritimeHandler/Resource",
+    "aws:asset:path": "asset.186be61268dff57edcae11d56fe03b2a3494fa9371e405a0f3e9063a875ff9fb",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BackendCreateMaritimeHandlerLogGroupA0E16641": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "BackendCreateMaritimeHandler98B68562"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/CreateMaritimeHandler/LogGroup/Resource"
+   }
+  },
+  "BackendReadMaritimeHandlerServiceRoleE40D1D67": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ReadMaritimeHandler/ServiceRole/Resource"
+   }
+  },
+  "BackendReadMaritimeHandlerServiceRoleDefaultPolicyF31B4BBF": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BackendMaritimeQuotationsTableFDF89FB0",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BackendMaritimeQuotationsTableFDF89FB0",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BackendReadMaritimeHandlerServiceRoleDefaultPolicyF31B4BBF",
+    "Roles": [
+     {
+      "Ref": "BackendReadMaritimeHandlerServiceRoleE40D1D67"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ReadMaritimeHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BackendReadMaritimeHandler6CDB5FFE": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "186be61268dff57edcae11d56fe03b2a3494fa9371e405a0f3e9063a875ff9fb.zip"
+    },
+    "Description": "Read maritime quotations (ALCE V2)",
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "BackendMaritimeQuotationsTableFDF89FB0"
+      }
+     }
+    },
+    "Handler": "read.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "BackendReadMaritimeHandlerServiceRoleE40D1D67",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.9"
+   },
+   "DependsOn": [
+    "BackendReadMaritimeHandlerServiceRoleDefaultPolicyF31B4BBF",
+    "BackendReadMaritimeHandlerServiceRoleE40D1D67"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ReadMaritimeHandler/Resource",
+    "aws:asset:path": "asset.186be61268dff57edcae11d56fe03b2a3494fa9371e405a0f3e9063a875ff9fb",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BackendReadMaritimeHandlerLogGroup60F10A2D": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "BackendReadMaritimeHandler6CDB5FFE"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ReadMaritimeHandler/LogGroup/Resource"
+   }
+  },
+  "BackendUpdateMaritimeHandlerServiceRole073676A0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/UpdateMaritimeHandler/ServiceRole/Resource"
+   }
+  },
+  "BackendUpdateMaritimeHandlerServiceRoleDefaultPolicyCF7B9C6B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BackendMaritimeQuotationsTableFDF89FB0",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BackendMaritimeQuotationsTableFDF89FB0",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BackendUpdateMaritimeHandlerServiceRoleDefaultPolicyCF7B9C6B",
+    "Roles": [
+     {
+      "Ref": "BackendUpdateMaritimeHandlerServiceRole073676A0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/UpdateMaritimeHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BackendUpdateMaritimeHandler16AADAF1": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "186be61268dff57edcae11d56fe03b2a3494fa9371e405a0f3e9063a875ff9fb.zip"
+    },
+    "Description": "Update maritime quotation (ALCE V2)",
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "BackendMaritimeQuotationsTableFDF89FB0"
+      }
+     }
+    },
+    "Handler": "update.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "BackendUpdateMaritimeHandlerServiceRole073676A0",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.9"
+   },
+   "DependsOn": [
+    "BackendUpdateMaritimeHandlerServiceRoleDefaultPolicyCF7B9C6B",
+    "BackendUpdateMaritimeHandlerServiceRole073676A0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/UpdateMaritimeHandler/Resource",
+    "aws:asset:path": "asset.186be61268dff57edcae11d56fe03b2a3494fa9371e405a0f3e9063a875ff9fb",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BackendUpdateMaritimeHandlerLogGroupC48044F4": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "BackendUpdateMaritimeHandler16AADAF1"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/UpdateMaritimeHandler/LogGroup/Resource"
+   }
+  },
+  "BackendDeleteMaritimeHandlerServiceRole10329B37": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/DeleteMaritimeHandler/ServiceRole/Resource"
+   }
+  },
+  "BackendDeleteMaritimeHandlerServiceRoleDefaultPolicy229B8978": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BackendMaritimeQuotationsTableFDF89FB0",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BackendMaritimeQuotationsTableFDF89FB0",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BackendDeleteMaritimeHandlerServiceRoleDefaultPolicy229B8978",
+    "Roles": [
+     {
+      "Ref": "BackendDeleteMaritimeHandlerServiceRole10329B37"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/DeleteMaritimeHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BackendDeleteMaritimeHandler10C756D0": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "186be61268dff57edcae11d56fe03b2a3494fa9371e405a0f3e9063a875ff9fb.zip"
+    },
+    "Description": "Delete maritime quotation (ALCE V2)",
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "BackendMaritimeQuotationsTableFDF89FB0"
+      }
+     }
+    },
+    "Handler": "delete.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "BackendDeleteMaritimeHandlerServiceRole10329B37",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.9"
+   },
+   "DependsOn": [
+    "BackendDeleteMaritimeHandlerServiceRoleDefaultPolicy229B8978",
+    "BackendDeleteMaritimeHandlerServiceRole10329B37"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/DeleteMaritimeHandler/Resource",
+    "aws:asset:path": "asset.186be61268dff57edcae11d56fe03b2a3494fa9371e405a0f3e9063a875ff9fb",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BackendDeleteMaritimeHandlerLogGroupEBD2FFC1": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "BackendDeleteMaritimeHandler10C756D0"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/DeleteMaritimeHandler/LogGroup/Resource"
+   }
+  },
+  "BackendChatbotMaritimoHandlerServiceRole22036383": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ChatbotMaritimoHandler/ServiceRole/Resource"
+   }
+  },
+  "BackendChatbotMaritimoHandlerServiceRoleDefaultPolicy3100E822": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BackendMaritimeQuotationsTableFDF89FB0",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BackendMaritimeQuotationsTableFDF89FB0",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "bedrock:InvokeModel",
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BackendChatbotMaritimoHandlerServiceRoleDefaultPolicy3100E822",
+    "Roles": [
+     {
+      "Ref": "BackendChatbotMaritimoHandlerServiceRole22036383"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ChatbotMaritimoHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BackendChatbotMaritimoHandlerE949A33D": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "ImageUri": {
+      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:95f1dd785033a665ad8b926601bb77c49e51b622de5324086919d01e65e0e4cc"
+     }
+    },
+    "Description": "AI chatbot maritimo ALCE V2 using Amazon Nova Pro via Bedrock",
+    "Environment": {
+     "Variables": {
+      "MARITIME_TABLE_NAME": {
+       "Ref": "BackendMaritimeQuotationsTableFDF89FB0"
+      },
+      "REGION": {
+       "Ref": "AWS::Region"
+      },
+      "MODEL_ID": "amazon.nova-pro-v1:0"
+     }
+    },
+    "ImageConfig": {
+     "Command": [
+      "chatbot_maritimo.handler"
+     ]
+    },
+    "MemorySize": 512,
+    "PackageType": "Image",
+    "Role": {
+     "Fn::GetAtt": [
+      "BackendChatbotMaritimoHandlerServiceRole22036383",
+      "Arn"
+     ]
+    },
+    "Timeout": 60
+   },
+   "DependsOn": [
+    "BackendChatbotMaritimoHandlerServiceRoleDefaultPolicy3100E822",
+    "BackendChatbotMaritimoHandlerServiceRole22036383"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ChatbotMaritimoHandler/Resource",
+    "aws:asset:path": "asset.95f1dd785033a665ad8b926601bb77c49e51b622de5324086919d01e65e0e4cc",
+    "aws:asset:dockerfile-path": "Dockerfile",
+    "aws:asset:property": "Code.ImageUri"
+   }
+  },
+  "BackendChatbotMaritimoHandlerLogGroupF679BEA2": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "BackendChatbotMaritimoHandlerE949A33D"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/ChatbotMaritimoHandler/LogGroup/Resource"
+   }
+  },
+  "BackendIaProjectApiCC9F9815": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "This service handles IA project requests.",
+    "Name": "IA Project Service"
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Resource"
+   }
+  },
+  "BackendIaProjectApiDeployment0F8302BE5c32032bef3d02be89f8bf457a86a189": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "This service handles IA project requests.",
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "DependsOn": [
+    "BackendIaProjectApichatbotmaritimoOPTIONS7032E2ED",
+    "BackendIaProjectApichatbotmaritimoPOST104A2A47",
+    "BackendIaProjectApichatbotmaritimo01C62F09",
+    "BackendIaProjectApichatbotOPTIONS414A62A3",
+    "BackendIaProjectApichatbotPOSTCF4F21C1",
+    "BackendIaProjectApichatbot3D2861E8",
+    "BackendIaProjectApimaritimequotationsidDELETE87A1373E",
+    "BackendIaProjectApimaritimequotationsidGETE686509F",
+    "BackendIaProjectApimaritimequotationsidOPTIONS2A7EC344",
+    "BackendIaProjectApimaritimequotationsidPUT03FDA66E",
+    "BackendIaProjectApimaritimequotationsidE5D26238",
+    "BackendIaProjectApimaritimequotationsGET0FB19C71",
+    "BackendIaProjectApimaritimequotationsOPTIONSDFE8B4B8",
+    "BackendIaProjectApimaritimequotationsPOSTF23F8A5E",
+    "BackendIaProjectApimaritimequotationsC50266FC",
+    "BackendIaProjectApiOPTIONS16D0D151",
+    "BackendIaProjectApitarifasidDELETEB2661AC0",
+    "BackendIaProjectApitarifasidGET91497FEE",
+    "BackendIaProjectApitarifasidOPTIONSF9DBE0D6",
+    "BackendIaProjectApitarifasidPUT4CA781D9",
+    "BackendIaProjectApitarifasidA2C0312D",
+    "BackendIaProjectApitarifasGET8D85CA45",
+    "BackendIaProjectApitarifasOPTIONS15EA7B89",
+    "BackendIaProjectApitarifasPOST6E2B9F71",
+    "BackendIaProjectApitarifasC39BEBF9"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Deployment/Resource",
+    "aws:cdk:do-not-refactor": true
+   }
+  },
+  "BackendIaProjectApiDeploymentStageprod42C54CAF": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "BackendIaProjectApiDeployment0F8302BE5c32032bef3d02be89f8bf457a86a189"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "BackendIaProjectApiOPTIONS16D0D151": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "BackendIaProjectApiCC9F9815",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/OPTIONS/Resource"
+   }
+  },
+  "BackendIaProjectApitarifasC39BEBF9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "BackendIaProjectApiCC9F9815",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "tarifas",
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/Resource"
+   }
+  },
+  "BackendIaProjectApitarifasOPTIONS15EA7B89": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "BackendIaProjectApitarifasC39BEBF9"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/OPTIONS/Resource"
+   }
+  },
+  "BackendIaProjectApitarifasPOSTApiPermissionIaProjectStackBackendIaProjectApi07215FF3POSTtarifasDF239947": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendCreateTarifaHandlerE1F71E84",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/POST/tarifas"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/POST/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.POST..tarifas"
+   }
+  },
+  "BackendIaProjectApitarifasPOSTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3POSTtarifasDB4CF40E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendCreateTarifaHandlerE1F71E84",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/POST/tarifas"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/POST/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.POST..tarifas"
+   }
+  },
+  "BackendIaProjectApitarifasPOST6E2B9F71": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendCreateTarifaHandlerE1F71E84",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApitarifasC39BEBF9"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/POST/Resource"
+   }
+  },
+  "BackendIaProjectApitarifasGETApiPermissionIaProjectStackBackendIaProjectApi07215FF3GETtarifas95FE38C4": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendReadTarifaHandler5DF73352",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/GET/tarifas"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/GET/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.GET..tarifas"
+   }
+  },
+  "BackendIaProjectApitarifasGETApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3GETtarifasC09A4E5B": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendReadTarifaHandler5DF73352",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/GET/tarifas"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/GET/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.GET..tarifas"
+   }
+  },
+  "BackendIaProjectApitarifasGET8D85CA45": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendReadTarifaHandler5DF73352",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApitarifasC39BEBF9"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/GET/Resource"
+   }
+  },
+  "BackendIaProjectApitarifasidA2C0312D": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "BackendIaProjectApitarifasC39BEBF9"
+    },
+    "PathPart": "{id}",
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/Resource"
+   }
+  },
+  "BackendIaProjectApitarifasidOPTIONSF9DBE0D6": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "BackendIaProjectApitarifasidA2C0312D"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/OPTIONS/Resource"
+   }
+  },
+  "BackendIaProjectApitarifasidGETApiPermissionIaProjectStackBackendIaProjectApi07215FF3GETtarifasid46CC4D6C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendReadTarifaHandler5DF73352",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/GET/tarifas/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/GET/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.GET..tarifas.{id}"
+   }
+  },
+  "BackendIaProjectApitarifasidGETApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3GETtarifasid03CB0484": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendReadTarifaHandler5DF73352",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/GET/tarifas/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/GET/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.GET..tarifas.{id}"
+   }
+  },
+  "BackendIaProjectApitarifasidGET91497FEE": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendReadTarifaHandler5DF73352",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApitarifasidA2C0312D"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/GET/Resource"
+   }
+  },
+  "BackendIaProjectApitarifasidPUTApiPermissionIaProjectStackBackendIaProjectApi07215FF3PUTtarifasidFD1B03B9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendUpdateTarifaHandler406A06F3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/PUT/tarifas/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/PUT/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.PUT..tarifas.{id}"
+   }
+  },
+  "BackendIaProjectApitarifasidPUTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3PUTtarifasidF848D184": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendUpdateTarifaHandler406A06F3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/PUT/tarifas/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/PUT/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.PUT..tarifas.{id}"
+   }
+  },
+  "BackendIaProjectApitarifasidPUT4CA781D9": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "PUT",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendUpdateTarifaHandler406A06F3",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApitarifasidA2C0312D"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/PUT/Resource"
+   }
+  },
+  "BackendIaProjectApitarifasidDELETEApiPermissionIaProjectStackBackendIaProjectApi07215FF3DELETEtarifasid47882A17": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendDeleteTarifaHandlerDF408F20",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/DELETE/tarifas/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/DELETE/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.DELETE..tarifas.{id}"
+   }
+  },
+  "BackendIaProjectApitarifasidDELETEApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3DELETEtarifasidD53512C9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendDeleteTarifaHandlerDF408F20",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/DELETE/tarifas/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/DELETE/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.DELETE..tarifas.{id}"
+   }
+  },
+  "BackendIaProjectApitarifasidDELETEB2661AC0": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "DELETE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendDeleteTarifaHandlerDF408F20",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApitarifasidA2C0312D"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/DELETE/Resource"
+   }
+  },
+  "BackendIaProjectApichatbot3D2861E8": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "BackendIaProjectApiCC9F9815",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "chatbot",
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/chatbot/Resource"
+   }
+  },
+  "BackendIaProjectApichatbotOPTIONS414A62A3": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "BackendIaProjectApichatbot3D2861E8"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/chatbot/OPTIONS/Resource"
+   }
+  },
+  "BackendIaProjectApichatbotPOSTApiPermissionIaProjectStackBackendIaProjectApi07215FF3POSTchatbot174CE2FD": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendChatbotTerrestreHandler69D8958B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/POST/chatbot"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/chatbot/POST/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.POST..chatbot"
+   }
+  },
+  "BackendIaProjectApichatbotPOSTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3POSTchatbot0C8235D0": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendChatbotTerrestreHandler69D8958B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/POST/chatbot"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/chatbot/POST/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.POST..chatbot"
+   }
+  },
+  "BackendIaProjectApichatbotPOSTCF4F21C1": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendChatbotTerrestreHandler69D8958B",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApichatbot3D2861E8"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/chatbot/POST/Resource"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsC50266FC": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "BackendIaProjectApiCC9F9815",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "maritime-quotations",
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/Resource"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsOPTIONSDFE8B4B8": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "BackendIaProjectApimaritimequotationsC50266FC"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/OPTIONS/Resource"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsPOSTApiPermissionIaProjectStackBackendIaProjectApi07215FF3POSTmaritimequotations5074258F": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendCreateMaritimeHandler98B68562",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/POST/maritime-quotations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/POST/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.POST..maritime-quotations"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsPOSTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3POSTmaritimequotationsE215C8B7": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendCreateMaritimeHandler98B68562",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/POST/maritime-quotations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/POST/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.POST..maritime-quotations"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsPOSTF23F8A5E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendCreateMaritimeHandler98B68562",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApimaritimequotationsC50266FC"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/POST/Resource"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsGETApiPermissionIaProjectStackBackendIaProjectApi07215FF3GETmaritimequotations07385472": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendReadMaritimeHandler6CDB5FFE",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/GET/maritime-quotations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/GET/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.GET..maritime-quotations"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsGETApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3GETmaritimequotationsE169334D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendReadMaritimeHandler6CDB5FFE",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/GET/maritime-quotations"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/GET/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.GET..maritime-quotations"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsGET0FB19C71": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendReadMaritimeHandler6CDB5FFE",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApimaritimequotationsC50266FC"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/GET/Resource"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidE5D26238": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "BackendIaProjectApimaritimequotationsC50266FC"
+    },
+    "PathPart": "{id}",
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/Resource"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidOPTIONS2A7EC344": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "BackendIaProjectApimaritimequotationsidE5D26238"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/OPTIONS/Resource"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidGETApiPermissionIaProjectStackBackendIaProjectApi07215FF3GETmaritimequotationsid0D349559": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendReadMaritimeHandler6CDB5FFE",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/GET/maritime-quotations/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/GET/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.GET..maritime-quotations.{id}"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidGETApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3GETmaritimequotationsid50055227": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendReadMaritimeHandler6CDB5FFE",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/GET/maritime-quotations/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/GET/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.GET..maritime-quotations.{id}"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidGETE686509F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendReadMaritimeHandler6CDB5FFE",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApimaritimequotationsidE5D26238"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/GET/Resource"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidPUTApiPermissionIaProjectStackBackendIaProjectApi07215FF3PUTmaritimequotationsid626222AD": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendUpdateMaritimeHandler16AADAF1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/PUT/maritime-quotations/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/PUT/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.PUT..maritime-quotations.{id}"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidPUTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3PUTmaritimequotationsid99F7F297": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendUpdateMaritimeHandler16AADAF1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/PUT/maritime-quotations/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/PUT/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.PUT..maritime-quotations.{id}"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidPUT03FDA66E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "PUT",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendUpdateMaritimeHandler16AADAF1",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApimaritimequotationsidE5D26238"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/PUT/Resource"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidDELETEApiPermissionIaProjectStackBackendIaProjectApi07215FF3DELETEmaritimequotationsid46733F6F": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendDeleteMaritimeHandler10C756D0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/DELETE/maritime-quotations/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/DELETE/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.DELETE..maritime-quotations.{id}"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidDELETEApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3DELETEmaritimequotationsid400D94C3": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendDeleteMaritimeHandler10C756D0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/DELETE/maritime-quotations/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/DELETE/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.DELETE..maritime-quotations.{id}"
+   }
+  },
+  "BackendIaProjectApimaritimequotationsidDELETE87A1373E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "DELETE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendDeleteMaritimeHandler10C756D0",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApimaritimequotationsidE5D26238"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/DELETE/Resource"
+   }
+  },
+  "BackendIaProjectApichatbotmaritimo01C62F09": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "BackendIaProjectApiCC9F9815",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "chatbot-maritimo",
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/Resource"
+   }
+  },
+  "BackendIaProjectApichatbotmaritimoOPTIONS7032E2ED": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "BackendIaProjectApichatbotmaritimo01C62F09"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/OPTIONS/Resource"
+   }
+  },
+  "BackendIaProjectApichatbotmaritimoPOSTApiPermissionIaProjectStackBackendIaProjectApi07215FF3POSTchatbotmaritimo14D563C9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendChatbotMaritimoHandlerE949A33D",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/",
+       {
+        "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+       },
+       "/POST/chatbot-maritimo"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/POST/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.POST..chatbot-maritimo"
+   }
+  },
+  "BackendIaProjectApichatbotmaritimoPOSTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3POSTchatbotmaritimoB0F1CBB6": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BackendChatbotMaritimoHandlerE949A33D",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "BackendIaProjectApiCC9F9815"
+       },
+       "/test-invoke-stage/POST/chatbot-maritimo"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/POST/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.POST..chatbot-maritimo"
+   }
+  },
+  "BackendIaProjectApichatbotmaritimoPOST104A2A47": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "BackendChatbotMaritimoHandlerE949A33D",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "BackendIaProjectApichatbotmaritimo01C62F09"
+    },
+    "RestApiId": {
+     "Ref": "BackendIaProjectApiCC9F9815"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/POST/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+0aXW/bNvC3lI8Fo60N+pI3J007o0mj2c6AQTCCs3SWr6FIjaTqqYL+e0Hqw3aztslQbE1AwIapO94n707k0S+jly9eRb8+g605SrPbI0GrqJlbSG85bM1Nk6pcklVRc21Qx0qJpGFQWfUHalrX7KRhWAAJdmJ1hS1nGgv1EUSsBKU1O2EZGqtVzTgzKNZzyuV1eS5hJTDraDgzlMupnAgCg+YLjpxVBrWEAtnJGoRxIqpek/ceyp6zdsnP1nJQkA+DM0EobdKMBH4yd+pv3gi19bI8DozZKp3ti5zrcrSpOmD4FbEdsuVZLaFQ2SpqFs7KpGElaEuWlHyH3mFyYMCZrUs3nLOWsxUJQTK/VJkDxZM/b+Lz2c3s/Pfr8/mCfcuz1gnaqcUbBln2VqgViDmmSmag66nM8G92kjSM3Oj9TodSqw+YOv0WnTaTiwsHvo/W7TJI+5HSQqgEafeR5iuPry8tF1CsMoiaN5X0DJPGrXeqqXRPPTXKj6SVLFDaHpJ2weOGG5CZQN0/6UpaOgyQ833qxM96zrzNQVKQ9MQl+Vwbkou/Vukt6mkBOT4w4QoslK7n9GnMaCpQVXc0bXkzfn4040eiqHd5jLogY0jJlhMUUTNTfjsFxlQFZqe+QJaaZEoliEmaqmqU1M1xBJN0VKnlrAAJOWb+xUhus5k0B7B6ovu5Q0VfqHgQMbxOk6bHWgvpZioFSRxxQ3B+GxlMCCYEE+7D9wkYGEwIJgQTvsfXv/Od4rwD+w3YwG6hHOaOlLvgLJtbsOg2HWZQODD6PqNHo+gTZvTP4G4v7FOi5eb4BoxBa6KJ++HmODqt0lu0p2AwWXKhchM1Fyp/q1VVJg0T/fCg5fN4gd4Zg3ktx1QP/tg7l3WuwVRHMyyVIat03fsHSsrB4hbqqJmhsZOS/OltDZWwZ0qbWONaUL6xV/4o41vEIITaXmnKyT13ZdaBfkPIUB+ALtFuVGaGqnv3UKQ7oV9Y1KvCX2MpVF10Xeu7xFDSyMYCyd10M/rMV9gLlVMKYpodhFaAB/i/g/sg3UUbn1vI0YfoANoLZo/kMzSq0in6xHNlj3e5kTQuBzxq6MtYW3a4HkDSYq5hL/DVXjJWdqM0fXKNnP2n6UA9gGCvueqTEUp6h/UM/6pIu8snf530tfmuWeFUmqEplTT9jslYsJU52/WUdI+OQUOBdqgG7bLtfXl5wOWhTHhw1n/lrL58/q8cwoI9sgULS/7Iljy4O+RHWLCfm0NY8ge62++6O4Jx29397Wh39VaC3cSg7bhAPyF2OAp7A9p2ZwvrrmLv+11y3wFw5xCSuWN6Vdmysi2Pa7tR8pfj6MVx9OrZB0N01N8DR7Pu9zN7iZl2DycAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "IaProjectStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "BackendIaProjectApiEndpoint749BC99F": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "BackendIaProjectApiCC9F9815"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

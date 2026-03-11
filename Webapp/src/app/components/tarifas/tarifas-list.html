@@ -1,0 +1,106 @@
+<app-header (onReset)="onReset()" (onLogout)="onLogout()"></app-header>
+
+<div class="tarifas-container">
+  <div class="tarifas-header">
+    <h1>Gestión de Tarifas Logísticas</h1>
+    <button class="btn-primary" (click)="createTarifa()">+ Nueva Tarifa</button>
+  </div>
+
+  <!-- Success/Error Messages -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <h3>Filtros</h3>
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="origen">Origen</label>
+        <input
+          id="origen"
+          type="text"
+          [(ngModel)]="filterOrigen"
+          placeholder="Ej: Puerto Quetzal"
+          class="filter-input"
+        />
+      </div>
+      <div class="filter-group">
+        <label for="destino">Destino</label>
+        <input
+          id="destino"
+          type="text"
+          [(ngModel)]="filterDestino"
+          placeholder="Ej: Mixco"
+          class="filter-input"
+        />
+      </div>
+      <div class="filter-group">
+        <label for="proveedor">Proveedor</label>
+        <input
+          id="proveedor"
+          type="text"
+          [(ngModel)]="filterProveedor"
+          placeholder="Ej: Nixon Larios"
+          class="filter-input"
+        />
+      </div>
+      <div class="filter-buttons">
+        <button class="btn-secondary" (click)="applyFilters()">Buscar</button>
+        <button class="btn-secondary-light" (click)="clearFilters()">Limpiar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <p>Cargando tarifas...</p>
+  </div>
+
+  <!-- Tarifas Table -->
+  <div *ngIf="!loading && tarifas.length > 0" class="tarifas-table-container">
+    <table class="tarifas-table">
+      <thead>
+        <tr>
+          <th>Origen</th>
+          <th>Destino</th>
+          <th>Proveedor</th>
+          <th>Fianza</th>
+          <th>Días Libres</th>
+          <th>Estadía</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tarifa of filteredTarifas" class="tarifa-row">
+          <td>{{ tarifa.origen }}</td>
+          <td>{{ tarifa.destino }}</td>
+          <td>{{ tarifa.proveedor }}</td>
+          <td>${{ tarifa.fianza }}</td>
+          <td>{{ tarifa.dias_libres }}</td>
+          <td>${{ tarifa.estadia }}</td>
+          <td class="actions-cell">
+            <button class="btn-action btn-view" (click)="viewDetails(tarifa.id)" title="Ver detalles">
+              👁️
+            </button>
+            <button class="btn-action btn-edit" (click)="editTarifa(tarifa.id)" title="Editar">
+              ✏️
+            </button>
+            <button class="btn-action btn-delete" (click)="deleteTarifa(tarifa.id)" title="Eliminar">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && tarifas.length === 0" class="empty-state">
+    <p>No hay tarifas disponibles</p>
+    <button class="btn-primary" (click)="createTarifa()">Crear primera tarifa</button>
+  </div>
+</div>

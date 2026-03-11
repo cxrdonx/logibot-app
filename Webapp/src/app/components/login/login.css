@@ -1,0 +1,25 @@
+/* Login Component Styles */
+
+:host {
+  display: block;
+}
+
+/* Smooth transitions */
+input, button {
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Animation for spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}

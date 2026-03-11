@@ -1,0 +1,292 @@
+<app-header></app-header>
+
+<div class="form-container">
+  <div class="form-header">
+    <h1>{{ editId ? (isViewMode ? 'Ver Cotización Marítima' : 'Editar Cotización Marítima') : 'Nueva Cotización Marítima' }}</h1>
+    <p class="hint">{{ editId ? 'Cotización #' + tarifa.details.quotationNumber : 'Ingresa los datos de la cotización marítima.' }}</p>
+  </div>
+
+  <div *ngIf="loading" class="alert alert-info">Cargando...</div>
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+  <form class="tarifa-form" (ngSubmit)="save()">
+    <!-- Supplier / Header -->
+    <fieldset class="form-section">
+      <legend>Proveedor</legend>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="supplierName">Nombre</label>
+          <input id="supplierName" type="text" [(ngModel)]="tarifa.supplierName" name="supplierName" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="supplierWebsite">Sitio web</label>
+          <input id="supplierWebsite" type="text" [(ngModel)]="tarifa.supplierWebsite" name="supplierWebsite" class="form-input" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="supplierEmail">Correo</label>
+          <input id="supplierEmail" type="email" [(ngModel)]="tarifa.supplierEmail" name="supplierEmail" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="supplierVat">VAT</label>
+          <input id="supplierVat" type="text" [(ngModel)]="tarifa.supplierVat" name="supplierVat" class="form-input" />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Requested By -->
+    <fieldset class="form-section">
+      <legend>Solicitado por</legend>
+
+      <div class="form-group">
+        <label for="rbNameCompany">Nombre / Empresa</label>
+        <input id="rbNameCompany" type="text" [(ngModel)]="tarifa.requestedBy.nameCompany" name="rbNameCompany" class="form-input" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="rbPrimaryContact">Contacto principal</label>
+          <input id="rbPrimaryContact" type="text" [(ngModel)]="tarifa.requestedBy.primaryContact" name="rbPrimaryContact" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="rbPhone">Teléfono</label>
+          <input id="rbPhone" type="text" [(ngModel)]="tarifa.requestedBy.phone" name="rbPhone" class="form-input" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="rbEmail">Correo</label>
+          <input id="rbEmail" type="email" [(ngModel)]="tarifa.requestedBy.email" name="rbEmail" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="rbVat">VAT #</label>
+          <input id="rbVat" type="text" [(ngModel)]="tarifa.requestedBy.vatNumber" name="rbVat" class="form-input" />
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="rbAddress">Dirección</label>
+        <textarea id="rbAddress" [(ngModel)]="tarifa.requestedBy.address" name="rbAddress" rows="2" class="form-input"></textarea>
+      </div>
+    </fieldset>
+
+    <!-- Origin / Destination -->
+    <fieldset class="form-section">
+      <legend>Ruta</legend>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="originPort">Origen - Puerto *</label>
+          <input id="originPort" type="text" [(ngModel)]="tarifa.origin.portCodeName" name="originPort" class="form-input" placeholder="Ej: NLRTM - ROTTERDAM - NETHERLANDS" required />
+        </div>
+        <div class="form-group">
+          <label for="destinationPort">Destino - Puerto *</label>
+          <input id="destinationPort" type="text" [(ngModel)]="tarifa.destination.portCodeName" name="destinationPort" class="form-input" placeholder="Ej: GTPBR - PUERTO BARRIOS - GUATEMALA" required />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Details -->
+    <fieldset class="form-section">
+      <legend>Detalles</legend>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="quotationNumber">No. Cotización *</label>
+          <input id="quotationNumber" type="text" [(ngModel)]="tarifa.details.quotationNumber" name="quotationNumber" class="form-input" placeholder="Ej: Q-000793" required />
+        </div>
+        <div class="form-group">
+          <label for="poNumber">No. PO</label>
+          <input id="poNumber" type="text" [(ngModel)]="tarifa.details.poNumber" name="poNumber" class="form-input" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="shipmentType">Tipo de embarque</label>
+          <input id="shipmentType" type="text" [(ngModel)]="tarifa.details.shipmentType" name="shipmentType" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="movementType">Tipo de movimiento</label>
+          <input id="movementType" type="text" [(ngModel)]="tarifa.details.movementType" name="movementType" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="shipmentTerm">Término de embarque</label>
+          <input id="shipmentTerm" type="text" [(ngModel)]="tarifa.details.shipmentTerm" name="shipmentTerm" class="form-input" />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Commodities -->
+    <fieldset class="form-section">
+      <legend>Mercancías</legend>
+
+      <div class="rango-list" *ngIf="tarifa.commodities.length">
+        <div class="rango-item" *ngFor="let c of tarifa.commodities; let i = index">
+          <div class="rango-info">
+            <span>{{ c.description }} | {{ c.containerType }} | {{ c.grossWeightKg }} KG</span>
+          </div>
+          <button type="button" class="btn-remove" (click)="removeCommodity(i)">Eliminar</button>
+        </div>
+      </div>
+
+      <div class="add-rango-section">
+        <h4>Agregar mercancía</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="commodityDescription">Descripción</label>
+            <input id="commodityDescription" type="text" [(ngModel)]="newCommodity.description" name="commodityDescription" class="form-input" placeholder="Ej: GENERAL CARGO - PALLETIZED" />
+          </div>
+          <div class="form-group">
+            <label for="commodityContainerType">Tipo de contenedor</label>
+            <input id="commodityContainerType" type="text" [(ngModel)]="newCommodity.containerType" name="commodityContainerType" class="form-input" placeholder="Ej: 1 X 40HC" />
+          </div>
+          <div class="form-group">
+            <label for="commodityGrossWeight">Peso bruto (KG)</label>
+            <input id="commodityGrossWeight" type="number" min="0" [(ngModel)]="newCommodity.grossWeightKg" name="commodityGrossWeight" class="form-input" />
+          </div>
+          <button type="button" class="btn-add-rango" (click)="addCommodity()">+ Agregar</button>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Quote Info -->
+    <fieldset class="form-section">
+      <legend>Información de la cotización</legend>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="quoteDate">Fecha de cotización</label>
+          <input id="quoteDate" type="date" [(ngModel)]="tarifa.quoteInfo.quoteDate" name="quoteDate" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="validFrom">Válida desde</label>
+          <input id="validFrom" type="date" [(ngModel)]="tarifa.quoteInfo.validFrom" name="validFrom" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="validTill">Válida hasta</label>
+          <input id="validTill" type="date" [(ngModel)]="tarifa.quoteInfo.validTill" name="validTill" class="form-input" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="viaPort">Puerto vía</label>
+          <input id="viaPort" type="text" [(ngModel)]="tarifa.quoteInfo.viaPort" name="viaPort" class="form-input" placeholder="Ej: JMKIN - KINGSTON" />
+        </div>
+        <div class="form-group">
+          <label for="shippingLine">Naviera</label>
+          <input id="shippingLine" type="text" [(ngModel)]="tarifa.quoteInfo.shippingLine" name="shippingLine" class="form-input" placeholder="Ej: CMA CGM" />
+        </div>
+        <div class="form-group">
+          <label for="transitTimeDays">Tiempo de tránsito (días)</label>
+          <input id="transitTimeDays" type="number" min="0" [(ngModel)]="tarifa.quoteInfo.transitTimeDays" name="transitTimeDays" class="form-input" />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Charges -->
+    <fieldset class="form-section">
+      <legend>Cargos</legend>
+
+      <div class="rango-list" *ngIf="tarifa.charges.length">
+        <div class="rango-item" *ngFor="let ch of tarifa.charges; let i = index">
+          <div class="rango-info">
+            <span>
+              {{ ch.description }} | {{ ch.quantity }} {{ ch.unit }} | {{ ch.currency }} {{ ch.price }}
+              <strong>→ Monto: {{ ch.currency }} {{ getChargeAmount(ch) }}</strong>
+            </span>
+          </div>
+          <button type="button" class="btn-remove" (click)="removeCharge(i)">Eliminar</button>
+        </div>
+      </div>
+
+      <div class="add-rango-section">
+        <h4>Agregar cargo</h4>
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="chargeDescription">Descripción</label>
+            <input id="chargeDescription" type="text" [(ngModel)]="newCharge.description" name="chargeDescription" class="form-input" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="chargeQuantity">Cantidad</label>
+            <input id="chargeQuantity" type="number" min="0" [(ngModel)]="newCharge.quantity" name="chargeQuantity" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label for="chargeUnit">Unidad</label>
+            <input id="chargeUnit" type="text" [(ngModel)]="newCharge.unit" name="chargeUnit" class="form-input" placeholder="Ej: PER SHIPMENT" />
+          </div>
+          <div class="form-group">
+            <label for="chargeMinimum">Mínimo</label>
+            <input id="chargeMinimum" type="number" min="0" [(ngModel)]="newCharge.minimum" name="chargeMinimum" class="form-input" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="chargeCurrency">Moneda</label>
+            <select id="chargeCurrency" [(ngModel)]="newCharge.currency" name="chargeCurrency" class="form-input">
+              <option value="EUR">EUR</option>
+              <option value="USD">USD</option>
+              <option value="GTQ">GTQ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="chargePrice">Precio</label>
+            <input id="chargePrice" type="number" min="0" [(ngModel)]="newCharge.price" name="chargePrice" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label for="chargeExchangeRate">Tipo de cambio</label>
+            <input id="chargeExchangeRate" type="number" min="0" step="0.0001" [(ngModel)]="newCharge.exchangeRate" name="chargeExchangeRate" class="form-input" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="chargeTax">Impuesto</label>
+            <input id="chargeTax" type="text" [(ngModel)]="newCharge.tax" name="chargeTax" class="form-input" placeholder="Ej: —" />
+          </div>
+          <div class="form-group">
+            <label for="chargeFrCr">FR.CR</label>
+            <input id="chargeFrCr" type="text" [(ngModel)]="newCharge.frCr" name="chargeFrCr" class="form-input" />
+          </div>
+          <button type="button" class="btn-add-rango" (click)="addCharge()">+ Agregar</button>
+        </div>
+      </div>
+
+      <div class="totals">
+        <div class="totals-row">
+          <span><strong>Subtotal</strong></span>
+          <span><strong>{{ subTotal | number:'1.2-2' }}</strong></span>
+        </div>
+        <div class="totals-row">
+          <span><strong>Total</strong></span>
+          <span><strong>{{ subTotal | number:'1.2-2' }}</strong></span>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Notes -->
+    <fieldset class="form-section">
+      <legend>Notas</legend>
+      <div class="form-group full-width">
+        <textarea id="notes" [(ngModel)]="tarifa.notes" name="notes" rows="4" class="form-input"></textarea>
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-save" [disabled]="loading || isViewMode">
+        {{ loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Guardar') }}
+      </button>
+      <button type="button" class="btn-cancel" (click)="cancel()">Cancelar</button>
+    </div>
+  </form>
+</div>

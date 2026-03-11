@@ -1,0 +1,3117 @@
+{
+  "version": "48.0.0",
+  "artifacts": {
+    "IaProjectStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "IaProjectStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "IaProjectStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "IaProjectStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/300feacb6fb658f8e3b28676eb06578e650c51a6a58e25bc57455b561c03074b.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "IaProjectStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "IaProjectStack.assets"
+      ],
+      "metadata": {
+        "/IaProjectStack/Auth/IaProjectUserPool": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "autoVerify": {
+                "email": true
+              },
+              "removalPolicy": "destroy",
+              "selfSignUpEnabled": true,
+              "signInAliases": {
+                "email": true,
+                "username": false
+              },
+              "userPoolName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Auth/IaProjectUserPool/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuthIaProjectUserPoolCC30A8D7"
+          }
+        ],
+        "/IaProjectStack/Auth/IaProjectUserPool/IaProjectUserPoolClient": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "userPool": "*",
+              "authFlows": {
+                "userPassword": true,
+                "userSrp": true
+              },
+              "userPoolClientName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Auth/IaProjectUserPool/IaProjectUserPoolClient/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuthIaProjectUserPoolIaProjectUserPoolClient34B2E79E"
+          }
+        ],
+        "/IaProjectStack/Backend/TarifasLogisticaTable": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "partitionKey": {
+                "name": "*",
+                "type": "S"
+              },
+              "billingMode": "PAY_PER_REQUEST",
+              "removalPolicy": "destroy",
+              "tableName": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "BackendTarifasLogisticaTable519724D2"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "projectionType": "ALL",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "projectionType": "ALL",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "projectionType": "ALL",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "projectionType": "ALL",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/TarifasLogisticaTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendTarifasLogisticaTable519724D2"
+          }
+        ],
+        "/IaProjectStack/Backend/TarifasLogisticaTable/ScalingRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateTarifaHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateTarifaHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateTarifaHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateTarifaHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateTarifaHandlerServiceRole1F282E2E"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateTarifaHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateTarifaHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateTarifaHandlerServiceRoleDefaultPolicy8E652557"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateTarifaHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateTarifaHandlerE1F71E84"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateTarifaHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateTarifaHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateTarifaHandlerLogGroup23C8A788"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadTarifaHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadTarifaHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadTarifaHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadTarifaHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadTarifaHandlerServiceRole1C086006"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadTarifaHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadTarifaHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadTarifaHandlerServiceRoleDefaultPolicy1AE7B2A4"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadTarifaHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadTarifaHandler5DF73352"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadTarifaHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadTarifaHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadTarifaHandlerLogGroupAB9DA246"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateTarifaHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateTarifaHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateTarifaHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateTarifaHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateTarifaHandlerServiceRoleC040F76E"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateTarifaHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateTarifaHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateTarifaHandlerServiceRoleDefaultPolicy2163E57B"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateTarifaHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateTarifaHandler406A06F3"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateTarifaHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateTarifaHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateTarifaHandlerLogGroupE8FCA214"
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteTarifaHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteTarifaHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteTarifaHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteTarifaHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendDeleteTarifaHandlerServiceRole7BBDEABF"
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteTarifaHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteTarifaHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendDeleteTarifaHandlerServiceRoleDefaultPolicyEF7C1320"
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteTarifaHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendDeleteTarifaHandlerDF408F20"
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteTarifaHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteTarifaHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendDeleteTarifaHandlerLogGroup2167AFFE"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotTerrestreHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "memorySize": "*",
+              "timeout": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "memorySize": "*",
+              "timeout": "*",
+              "code": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotTerrestreHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotTerrestreHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotTerrestreHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotTerrestreHandlerServiceRoleDDDF572A"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotTerrestreHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotTerrestreHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotTerrestreHandlerServiceRoleDefaultPolicyD41CFDC9"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotTerrestreHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotTerrestreHandler69D8958B"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotTerrestreHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotTerrestreHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotTerrestreHandlerLogGroup86B71782"
+          }
+        ],
+        "/IaProjectStack/Backend/MaritimeQuotationsTable": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "partitionKey": {
+                "name": "*",
+                "type": "S"
+              },
+              "billingMode": "PAY_PER_REQUEST",
+              "removalPolicy": "destroy",
+              "tableName": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "BackendMaritimeQuotationsTableFDF89FB0"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "projectionType": "ALL",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "projectionType": "ALL",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "projectionType": "ALL",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "projectionType": "ALL",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/MaritimeQuotationsTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendMaritimeQuotationsTableFDF89FB0"
+          }
+        ],
+        "/IaProjectStack/Backend/MaritimeQuotationsTable/ScalingRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateMaritimeHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateMaritimeHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateMaritimeHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateMaritimeHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateMaritimeHandlerServiceRoleEC3C1515"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateMaritimeHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateMaritimeHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateMaritimeHandlerServiceRoleDefaultPolicy7B6031A6"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateMaritimeHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateMaritimeHandler98B68562"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateMaritimeHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateMaritimeHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateMaritimeHandlerLogGroupA0E16641"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadMaritimeHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadMaritimeHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadMaritimeHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadMaritimeHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadMaritimeHandlerServiceRoleE40D1D67"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadMaritimeHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadMaritimeHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadMaritimeHandlerServiceRoleDefaultPolicyF31B4BBF"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadMaritimeHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadMaritimeHandler6CDB5FFE"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadMaritimeHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadMaritimeHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadMaritimeHandlerLogGroup60F10A2D"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateMaritimeHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateMaritimeHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateMaritimeHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateMaritimeHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateMaritimeHandlerServiceRole073676A0"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateMaritimeHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateMaritimeHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateMaritimeHandlerServiceRoleDefaultPolicyCF7B9C6B"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateMaritimeHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateMaritimeHandler16AADAF1"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateMaritimeHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateMaritimeHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateMaritimeHandlerLogGroupC48044F4"
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteMaritimeHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteMaritimeHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteMaritimeHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteMaritimeHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendDeleteMaritimeHandlerServiceRole10329B37"
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteMaritimeHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteMaritimeHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendDeleteMaritimeHandlerServiceRoleDefaultPolicy229B8978"
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteMaritimeHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendDeleteMaritimeHandler10C756D0"
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteMaritimeHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/DeleteMaritimeHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendDeleteMaritimeHandlerLogGroupEBD2FFC1"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotMaritimoHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "memorySize": "*",
+              "timeout": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "memorySize": "*",
+              "timeout": "*",
+              "code": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotMaritimoHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotMaritimoHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotMaritimoHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotMaritimoHandlerServiceRole22036383"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotMaritimoHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotMaritimoHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotMaritimoHandlerServiceRoleDefaultPolicy3100E822"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotMaritimoHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotMaritimoHandlerE949A33D"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotMaritimoHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotMaritimoHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotMaritimoHandlerLogGroupF679BEA2"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "defaultCorsPreflightOptions": {
+                "allowOrigins": "*",
+                "allowHeaders": "*",
+                "allowMethods": "*"
+              },
+              "description": "*",
+              "restApiName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApiCC9F9815"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Deployment": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "api": "*",
+              "retainDeployments": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApiDeployment0F8302BE5c32032bef3d02be89f8bf457a86a189"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/DeploymentStage.prod": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "deployment": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApiDeploymentStageprod42C54CAF"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApiEndpoint749BC99F"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/OPTIONS": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": {
+                "authorizer": {
+                  "authorizerId": "*",
+                  "authorizationType": "*"
+                },
+                "apiKeyRequired": false,
+                "authorizationType": "*",
+                "methodResponses": [
+                  {
+                    "statusCode": "*",
+                    "responseParameters": "*"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addMethodResponse": [
+                {
+                  "statusCode": "*",
+                  "responseParameters": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApiOPTIONS16D0D151"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "parent": "*",
+              "pathPart": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasC39BEBF9"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/OPTIONS": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": {
+                "authorizer": {
+                  "authorizerId": "*",
+                  "authorizationType": "*"
+                },
+                "apiKeyRequired": false,
+                "authorizationType": "*",
+                "methodResponses": [
+                  {
+                    "statusCode": "*",
+                    "responseParameters": "*"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addMethodResponse": [
+                {
+                  "statusCode": "*",
+                  "responseParameters": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasOPTIONS15EA7B89"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/POST": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/POST/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.POST..tarifas": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasPOSTApiPermissionIaProjectStackBackendIaProjectApi07215FF3POSTtarifasDF239947"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/POST/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.POST..tarifas": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasPOSTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3POSTtarifasDB4CF40E"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasPOST6E2B9F71"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/GET": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/GET/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.GET..tarifas": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasGETApiPermissionIaProjectStackBackendIaProjectApi07215FF3GETtarifas95FE38C4"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/GET/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.GET..tarifas": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasGETApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3GETtarifasC09A4E5B"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasGET8D85CA45"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "parent": "*",
+              "pathPart": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidA2C0312D"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/OPTIONS": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": {
+                "authorizer": {
+                  "authorizerId": "*",
+                  "authorizationType": "*"
+                },
+                "apiKeyRequired": false,
+                "authorizationType": "*",
+                "methodResponses": [
+                  {
+                    "statusCode": "*",
+                    "responseParameters": "*"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addMethodResponse": [
+                {
+                  "statusCode": "*",
+                  "responseParameters": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidOPTIONSF9DBE0D6"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/GET": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/GET/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.GET..tarifas.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidGETApiPermissionIaProjectStackBackendIaProjectApi07215FF3GETtarifasid46CC4D6C"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/GET/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.GET..tarifas.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidGETApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3GETtarifasid03CB0484"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidGET91497FEE"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/PUT": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/PUT/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.PUT..tarifas.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidPUTApiPermissionIaProjectStackBackendIaProjectApi07215FF3PUTtarifasidFD1B03B9"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/PUT/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.PUT..tarifas.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidPUTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3PUTtarifasidF848D184"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/PUT/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidPUT4CA781D9"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/DELETE": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/DELETE/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.DELETE..tarifas.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidDELETEApiPermissionIaProjectStackBackendIaProjectApi07215FF3DELETEtarifasid47882A17"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/DELETE/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.DELETE..tarifas.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidDELETEApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3DELETEtarifasidD53512C9"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/tarifas/{id}/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApitarifasidDELETEB2661AC0"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "parent": "*",
+              "pathPart": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbot3D2861E8"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot/OPTIONS": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": {
+                "authorizer": {
+                  "authorizerId": "*",
+                  "authorizationType": "*"
+                },
+                "apiKeyRequired": false,
+                "authorizationType": "*",
+                "methodResponses": [
+                  {
+                    "statusCode": "*",
+                    "responseParameters": "*"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addMethodResponse": [
+                {
+                  "statusCode": "*",
+                  "responseParameters": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotOPTIONS414A62A3"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot/POST": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot/POST/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.POST..chatbot": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotPOSTApiPermissionIaProjectStackBackendIaProjectApi07215FF3POSTchatbot174CE2FD"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot/POST/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.POST..chatbot": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotPOSTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3POSTchatbot0C8235D0"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotPOSTCF4F21C1"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "parent": "*",
+              "pathPart": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsC50266FC"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/OPTIONS": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": {
+                "authorizer": {
+                  "authorizerId": "*",
+                  "authorizationType": "*"
+                },
+                "apiKeyRequired": false,
+                "authorizationType": "*",
+                "methodResponses": [
+                  {
+                    "statusCode": "*",
+                    "responseParameters": "*"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addMethodResponse": [
+                {
+                  "statusCode": "*",
+                  "responseParameters": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsOPTIONSDFE8B4B8"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/POST": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/POST/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.POST..maritime-quotations": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsPOSTApiPermissionIaProjectStackBackendIaProjectApi07215FF3POSTmaritimequotations5074258F"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/POST/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.POST..maritime-quotations": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsPOSTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3POSTmaritimequotationsE215C8B7"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsPOSTF23F8A5E"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/GET": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/GET/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.GET..maritime-quotations": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsGETApiPermissionIaProjectStackBackendIaProjectApi07215FF3GETmaritimequotations07385472"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/GET/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.GET..maritime-quotations": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsGETApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3GETmaritimequotationsE169334D"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsGET0FB19C71"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "parent": "*",
+              "pathPart": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidE5D26238"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/OPTIONS": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": {
+                "authorizer": {
+                  "authorizerId": "*",
+                  "authorizationType": "*"
+                },
+                "apiKeyRequired": false,
+                "authorizationType": "*",
+                "methodResponses": [
+                  {
+                    "statusCode": "*",
+                    "responseParameters": "*"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addMethodResponse": [
+                {
+                  "statusCode": "*",
+                  "responseParameters": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidOPTIONS2A7EC344"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/GET": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/GET/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.GET..maritime-quotations.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidGETApiPermissionIaProjectStackBackendIaProjectApi07215FF3GETmaritimequotationsid0D349559"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/GET/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.GET..maritime-quotations.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidGETApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3GETmaritimequotationsid50055227"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidGETE686509F"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/PUT": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/PUT/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.PUT..maritime-quotations.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidPUTApiPermissionIaProjectStackBackendIaProjectApi07215FF3PUTmaritimequotationsid626222AD"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/PUT/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.PUT..maritime-quotations.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidPUTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3PUTmaritimequotationsid99F7F297"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/PUT/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidPUT03FDA66E"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/DELETE": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/DELETE/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.DELETE..maritime-quotations.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidDELETEApiPermissionIaProjectStackBackendIaProjectApi07215FF3DELETEmaritimequotationsid46733F6F"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/DELETE/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.DELETE..maritime-quotations.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidDELETEApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3DELETEmaritimequotationsid400D94C3"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/maritime-quotations/{id}/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApimaritimequotationsidDELETE87A1373E"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "parent": "*",
+              "pathPart": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotmaritimo01C62F09"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/OPTIONS": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": {
+                "authorizer": {
+                  "authorizerId": "*",
+                  "authorizationType": "*"
+                },
+                "apiKeyRequired": false,
+                "authorizationType": "*",
+                "methodResponses": [
+                  {
+                    "statusCode": "*",
+                    "responseParameters": "*"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addMethodResponse": [
+                {
+                  "statusCode": "*",
+                  "responseParameters": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotmaritimoOPTIONS7032E2ED"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/POST": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/POST/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.POST..chatbot-maritimo": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotmaritimoPOSTApiPermissionIaProjectStackBackendIaProjectApi07215FF3POSTchatbotmaritimo14D563C9"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/POST/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.POST..chatbot-maritimo": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotmaritimoPOSTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3POSTchatbotmaritimoB0F1CBB6"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-maritimo/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotmaritimoPOST104A2A47"
+          }
+        ],
+        "/IaProjectStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/IaProjectStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/IaProjectStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/IaProjectStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "IaProjectStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "aws-cdk-lib/feature-flag-report": {
+      "type": "cdk:feature-flag-report",
+      "properties": {
+        "module": "aws-cdk-lib",
+        "flags": {
+          "@aws-cdk/aws-signer:signingProfileNamePassedToCfn": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Pass signingProfileName to CfnSigningProfile"
+          },
+          "@aws-cdk/core:newStyleStackSynthesis": {
+            "recommendedValue": true,
+            "explanation": "Switch to new stack synthesis method which enables CI/CD",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/core:stackRelativeExports": {
+            "recommendedValue": true,
+            "explanation": "Name exports based on the construct paths relative to the stack, rather than the global construct path",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/aws-ecs-patterns:secGroupsDisablesImplicitOpenListener": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Disable implicit openListener when custom security groups are provided"
+          },
+          "@aws-cdk/aws-rds:lowercaseDbIdentifier": {
+            "recommendedValue": true,
+            "explanation": "Force lowercasing of RDS Cluster names in CDK",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": {
+            "recommendedValue": true,
+            "explanation": "Allow adding/removing multiple UsagePlanKeys independently",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/aws-lambda:recognizeVersionProps": {
+            "recommendedValue": true,
+            "explanation": "Enable this feature flag to opt in to the updated logical id calculation for Lambda Version created using the  `fn.currentVersion`.",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/aws-lambda:recognizeLayerVersion": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enable this feature flag to opt in to the updated logical id calculation for Lambda Version created using the `fn.currentVersion`."
+          },
+          "@aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021": {
+            "recommendedValue": true,
+            "explanation": "Enable this feature flag to have cloudfront distributions use the security policy TLSv1.2_2021 by default.",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/core:checkSecretUsage": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enable this flag to make it impossible to accidentally use SecretValues in unsafe locations"
+          },
+          "@aws-cdk/core:target-partitions": {
+            "userValue": [
+              "aws",
+              "aws-cn"
+            ],
+            "recommendedValue": [
+              "aws",
+              "aws-cn"
+            ],
+            "explanation": "What regions to include in lookup tables of environment agnostic stacks"
+          },
+          "@aws-cdk-containers/ecs-service-extensions:enableDefaultLogDriver": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "ECS extensions will automatically add an `awslogs` driver if no logging is specified"
+          },
+          "@aws-cdk/aws-ec2:uniqueImdsv2TemplateName": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enable this feature flag to have Launch Templates generated by the `InstanceRequireImdsv2Aspect` use unique names."
+          },
+          "@aws-cdk/aws-ecs:arnFormatIncludesClusterName": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "ARN format used by ECS. In the new ARN format, the cluster name is part of the resource ID."
+          },
+          "@aws-cdk/aws-iam:minimizePolicies": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Minimize IAM policies by combining Statements"
+          },
+          "@aws-cdk/core:validateSnapshotRemovalPolicy": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Error on snapshot removal policies on resources that do not support it."
+          },
+          "@aws-cdk/aws-codepipeline:crossAccountKeyAliasStackSafeResourceName": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Generate key aliases that include the stack name"
+          },
+          "@aws-cdk/aws-s3:createDefaultLoggingPolicy": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enable this feature flag to create an S3 bucket policy by default in cases where an AWS service would automatically create the Policy if one does not exist."
+          },
+          "@aws-cdk/aws-sns-subscriptions:restrictSqsDescryption": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Restrict KMS key policy for encrypted Queues a bit more"
+          },
+          "@aws-cdk/aws-apigateway:disableCloudWatchRole": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Make default CloudWatch Role behavior safe for multiple API Gateways in one environment"
+          },
+          "@aws-cdk/core:enablePartitionLiterals": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Make ARNs concrete if AWS partition is known"
+          },
+          "@aws-cdk/aws-events:eventsTargetQueueSameAccount": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Event Rules may only push to encrypted SQS queues in the same account"
+          },
+          "@aws-cdk/aws-ecs:disableExplicitDeploymentControllerForCircuitBreaker": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Avoid setting the \"ECS\" deployment controller when adding a circuit breaker"
+          },
+          "@aws-cdk/aws-iam:importedRoleStackSafeDefaultPolicyName": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enable this feature to by default create default policy names for imported roles that depend on the stack the role is in."
+          },
+          "@aws-cdk/aws-s3:serverAccessLogsUseBucketPolicy": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Use S3 Bucket Policy instead of ACLs for Server Access Logging"
+          },
+          "@aws-cdk/aws-route53-patters:useCertificate": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Use the official `Certificate` resource instead of `DnsValidatedCertificate`"
+          },
+          "@aws-cdk/customresources:installLatestAwsSdkDefault": {
+            "userValue": false,
+            "recommendedValue": false,
+            "explanation": "Whether to install the latest SDK by default in AwsCustomResource"
+          },
+          "@aws-cdk/aws-rds:databaseProxyUniqueResourceName": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Use unique resource name for Database Proxy"
+          },
+          "@aws-cdk/aws-codedeploy:removeAlarmsFromDeploymentGroup": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Remove CloudWatch alarms from deployment group"
+          },
+          "@aws-cdk/aws-apigateway:authorizerChangeDeploymentLogicalId": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Include authorizer configuration in the calculation of the API deployment logical ID."
+          },
+          "@aws-cdk/aws-ec2:launchTemplateDefaultUserData": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Define user data for a launch template by default when a machine image is provided."
+          },
+          "@aws-cdk/aws-secretsmanager:useAttachedSecretResourcePolicyForSecretTargetAttachments": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "SecretTargetAttachments uses the ResourcePolicy of the attached Secret."
+          },
+          "@aws-cdk/aws-redshift:columnId": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Whether to use an ID to track Redshift column changes"
+          },
+          "@aws-cdk/aws-stepfunctions-tasks:enableEmrServicePolicyV2": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enable AmazonEMRServicePolicy_v2 managed policies"
+          },
+          "@aws-cdk/aws-ec2:restrictDefaultSecurityGroup": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Restrict access to the VPC default security group"
+          },
+          "@aws-cdk/aws-apigateway:requestValidatorUniqueId": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Generate a unique id for each RequestValidator added to a method"
+          },
+          "@aws-cdk/aws-kms:aliasNameRef": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "KMS Alias name and keyArn will have implicit reference to KMS Key"
+          },
+          "@aws-cdk/aws-kms:applyImportedAliasPermissionsToPrincipal": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enable grant methods on Aliases imported by name to use kms:ResourceAliases condition"
+          },
+          "@aws-cdk/aws-autoscaling:generateLaunchTemplateInsteadOfLaunchConfig": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Generate a launch template when creating an AutoScalingGroup"
+          },
+          "@aws-cdk/core:includePrefixInUniqueNameGeneration": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Include the stack prefix in the stack name generation process"
+          },
+          "@aws-cdk/aws-efs:denyAnonymousAccess": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "EFS denies anonymous clients accesses"
+          },
+          "@aws-cdk/aws-opensearchservice:enableOpensearchMultiAzWithStandby": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enables support for Multi-AZ with Standby deployment for opensearch domains"
+          },
+          "@aws-cdk/aws-lambda-nodejs:useLatestRuntimeVersion": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enables aws-lambda-nodejs.Function to use the latest available NodeJs runtime as the default"
+          },
+          "@aws-cdk/aws-efs:mountTargetOrderInsensitiveLogicalId": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, mount targets will have a stable logicalId that is linked to the associated subnet."
+          },
+          "@aws-cdk/aws-rds:auroraClusterChangeScopeOfInstanceParameterGroupWithEachParameters": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, a scope of InstanceParameterGroup for AuroraClusterInstance with each parameters will change."
+          },
+          "@aws-cdk/aws-appsync:useArnForSourceApiAssociationIdentifier": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, will always use the arn for identifiers for CfnSourceApiAssociation in the GraphqlApi construct rather than id."
+          },
+          "@aws-cdk/aws-rds:preventRenderingDeprecatedCredentials": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, creating an RDS database cluster from a snapshot will only render credentials for snapshot credentials."
+          },
+          "@aws-cdk/aws-codepipeline-actions:useNewDefaultBranchForCodeCommitSource": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, the CodeCommit source action is using the default branch name 'main'."
+          },
+          "@aws-cdk/aws-cloudwatch-actions:changeLambdaPermissionLogicalIdForLambdaAction": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, the logical ID of a Lambda permission for a Lambda action includes an alarm ID."
+          },
+          "@aws-cdk/aws-codepipeline:crossAccountKeysDefaultValueToFalse": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enables Pipeline to set the default value for crossAccountKeys to false."
+          },
+          "@aws-cdk/aws-codepipeline:defaultPipelineTypeToV2": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Enables Pipeline to set the default pipeline type to V2."
+          },
+          "@aws-cdk/aws-kms:reduceCrossAccountRegionPolicyScope": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, IAM Policy created from KMS key grant will reduce the resource scope to this key only."
+          },
+          "@aws-cdk/pipelines:reduceAssetRoleTrustScope": {
+            "recommendedValue": true,
+            "explanation": "Remove the root account principal from PipelineAssetsFileRole trust policy",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/aws-eks:nodegroupNameAttribute": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, nodegroupName attribute of the provisioned EKS NodeGroup will not have the cluster name prefix."
+          },
+          "@aws-cdk/aws-ec2:ebsDefaultGp3Volume": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, the default volume type of the EBS volume will be GP3"
+          },
+          "@aws-cdk/aws-ecs:removeDefaultDeploymentAlarm": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, remove default deployment alarm settings"
+          },
+          "@aws-cdk/custom-resources:logApiResponseDataPropertyTrueDefault": {
+            "userValue": false,
+            "recommendedValue": false,
+            "explanation": "When enabled, the custom resource used for `AwsCustomResource` will configure the `logApiResponseData` property as true by default"
+          },
+          "@aws-cdk/aws-s3:keepNotificationInImportedBucket": {
+            "userValue": false,
+            "recommendedValue": false,
+            "explanation": "When enabled, Adding notifications to a bucket in the current stack will not remove notification from imported stack."
+          },
+          "@aws-cdk/aws-stepfunctions-tasks:useNewS3UriParametersForBedrockInvokeModelTask": {
+            "recommendedValue": true,
+            "explanation": "When enabled, use new props for S3 URI field in task definition of state machine for bedrock invoke model.",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/core:explicitStackTags": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, stack tags need to be assigned explicitly on a Stack."
+          },
+          "@aws-cdk/aws-ecs:enableImdsBlockingDeprecatedFeature": {
+            "userValue": false,
+            "recommendedValue": false,
+            "explanation": "When set to true along with canContainersAccessInstanceRole=false in ECS cluster, new updated commands will be added to UserData to block container accessing IMDS. **Applicable to Linux only. IMPORTANT: See [details.](#aws-cdkaws-ecsenableImdsBlockingDeprecatedFeature)**"
+          },
+          "@aws-cdk/aws-ecs:disableEcsImdsBlocking": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When set to true, CDK synth will throw exception if canContainersAccessInstanceRole is false. **IMPORTANT: See [details.](#aws-cdkaws-ecsdisableEcsImdsBlocking)**"
+          },
+          "@aws-cdk/aws-ecs:reduceEc2FargateCloudWatchPermissions": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, we will only grant the necessary permissions when users specify cloudwatch log group through logConfiguration"
+          },
+          "@aws-cdk/aws-dynamodb:resourcePolicyPerReplica": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled will allow you to specify a resource policy per replica, and not copy the source table policy to all replicas"
+          },
+          "@aws-cdk/aws-ec2:ec2SumTImeoutEnabled": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, initOptions.timeout and resourceSignalTimeout values will be summed together."
+          },
+          "@aws-cdk/aws-appsync:appSyncGraphQLAPIScopeLambdaPermission": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, a Lambda authorizer Permission created when using GraphqlApi will be properly scoped with a SourceArn."
+          },
+          "@aws-cdk/aws-rds:setCorrectValueForDatabaseInstanceReadReplicaInstanceResourceId": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, the value of property `instanceResourceId` in construct `DatabaseInstanceReadReplica` will be set to the correct value which is `DbiResourceId` instead of currently `DbInstanceArn`"
+          },
+          "@aws-cdk/core:cfnIncludeRejectComplexResourceUpdateCreatePolicyIntrinsics": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, CFN templates added with `cfn-include` will error if the template contains Resource Update or Create policies with CFN Intrinsics that include non-primitive values."
+          },
+          "@aws-cdk/aws-lambda-nodejs:sdkV3ExcludeSmithyPackages": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, both `@aws-sdk` and `@smithy` packages will be excluded from the Lambda Node.js 18.x runtime to prevent version mismatches in bundled applications."
+          },
+          "@aws-cdk/aws-stepfunctions-tasks:fixRunEcsTaskPolicy": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, the resource of IAM Run Ecs policy generated by SFN EcsRunTask will reference the definition, instead of constructing ARN."
+          },
+          "@aws-cdk/aws-ec2:bastionHostUseAmazonLinux2023ByDefault": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, the BastionHost construct will use the latest Amazon Linux 2023 AMI, instead of Amazon Linux 2."
+          },
+          "@aws-cdk/core:aspectStabilization": {
+            "recommendedValue": true,
+            "explanation": "When enabled, a stabilization loop will be run when invoking Aspects during synthesis.",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/aws-route53-targets:userPoolDomainNameMethodWithoutCustomResource": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, use a new method for DNS Name of user pool domain target without creating a custom resource."
+          },
+          "@aws-cdk/aws-elasticloadbalancingV2:albDualstackWithoutPublicIpv4SecurityGroupRulesDefault": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, the default security group ingress rules will allow IPv6 ingress from anywhere"
+          },
+          "@aws-cdk/aws-iam:oidcRejectUnauthorizedConnections": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, the default behaviour of OIDC provider will reject unauthorized connections"
+          },
+          "@aws-cdk/core:enableAdditionalMetadataCollection": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, CDK will expand the scope of usage data collected to better inform CDK development and improve communication for security concerns and emerging issues."
+          },
+          "@aws-cdk/aws-lambda:createNewPoliciesWithAddToRolePolicy": {
+            "userValue": false,
+            "recommendedValue": false,
+            "explanation": "[Deprecated] When enabled, Lambda will create new inline policies with AddToRolePolicy instead of adding to the Default Policy Statement"
+          },
+          "@aws-cdk/aws-s3:setUniqueReplicationRoleName": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, CDK will automatically generate a unique role name that is used for s3 object replication."
+          },
+          "@aws-cdk/pipelines:reduceStageRoleTrustScope": {
+            "recommendedValue": true,
+            "explanation": "Remove the root account principal from Stage addActions trust policy",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/aws-events:requireEventBusPolicySid": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, grantPutEventsTo() will use resource policies with Statement IDs for service principals."
+          },
+          "@aws-cdk/core:aspectPrioritiesMutating": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When set to true, Aspects added by the construct library on your behalf will be given a priority of MUTATING."
+          },
+          "@aws-cdk/aws-dynamodb:retainTableReplica": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, table replica will be default to the removal policy of source table unless specified otherwise."
+          },
+          "@aws-cdk/cognito:logUserPoolClientSecretValue": {
+            "recommendedValue": false,
+            "explanation": "When disabled, the value of the user pool client secret will not be logged in the custom resource lambda function logs."
+          },
+          "@aws-cdk/pipelines:reduceCrossAccountActionRoleTrustScope": {
+            "recommendedValue": true,
+            "explanation": "When enabled, scopes down the trust policy for the cross-account action role",
+            "unconfiguredBehavesLike": {
+              "v2": true
+            }
+          },
+          "@aws-cdk/aws-stepfunctions:useDistributedMapResultWriterV2": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, the resultWriterV2 property of DistributedMap will be used insted of resultWriter"
+          },
+          "@aws-cdk/s3-notifications:addS3TrustKeyPolicyForSnsSubscriptions": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "Add an S3 trust policy to a KMS key resource policy for SNS subscriptions."
+          },
+          "@aws-cdk/aws-ec2:requirePrivateSubnetsForEgressOnlyInternetGateway": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, the EgressOnlyGateway resource is only created if private subnets are defined in the dual-stack VPC."
+          },
+          "@aws-cdk/aws-ec2-alpha:useResourceIdForVpcV2Migration": {
+            "recommendedValue": false,
+            "explanation": "When enabled, use resource IDs for VPC V2 migration"
+          },
+          "@aws-cdk/aws-s3:publicAccessBlockedByDefault": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, setting any combination of options for BlockPublicAccess will automatically set true for any options not defined."
+          },
+          "@aws-cdk/aws-lambda:useCdkManagedLogGroup": {
+            "userValue": true,
+            "recommendedValue": true,
+            "explanation": "When enabled, CDK creates and manages loggroup for the lambda function"
+          }
+        }
+      }
+    }
+  },
+  "minimumCliVersion": "2.1033.0"
+}

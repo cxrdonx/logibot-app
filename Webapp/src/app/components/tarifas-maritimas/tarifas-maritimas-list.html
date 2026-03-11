@@ -1,0 +1,91 @@
+<app-header></app-header>
+
+<div class="tarifas-container">
+  <div class="tarifas-header">
+    <h1>Cotizaciones Marítimas</h1>
+    <button class="btn-primary" (click)="createQuotation()">+ Nueva Cotización</button>
+  </div>
+
+  <!-- Success/Error Messages -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <!-- Filter -->
+  <div class="filters-section">
+    <h3>Buscar</h3>
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="filterText">Número de cotización / Puerto origen / Puerto destino</label>
+        <input
+          id="filterText"
+          type="text"
+          [(ngModel)]="filterText"
+          (ngModelChange)="applyFilter()"
+          placeholder="Ej: Q-000793 o ROTTERDAM o PUERTO BARRIOS"
+          class="filter-input"
+        />
+      </div>
+      <div class="filter-buttons">
+        <button class="btn-secondary-light" (click)="clearFilter()">Limpiar</button>
+        <button class="btn-secondary" (click)="loadQuotations()">Recargar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <p>Cargando cotizaciones...</p>
+  </div>
+
+  <!-- Quotations Table -->
+  <div *ngIf="!loading && filteredQuotations.length > 0" class="tarifas-table-container">
+    <table class="tarifas-table">
+      <thead>
+        <tr>
+          <th>Cotización #</th>
+          <th>Puerto Origen</th>
+          <th>Puerto Destino</th>
+          <th>Naviera</th>
+          <th>Válida Desde</th>
+          <th>Válida Hasta</th>
+          <th>Total</th>
+          <th>Moneda</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let q of filteredQuotations" class="tarifa-row">
+          <td><strong>{{ q.quotation_number }}</strong></td>
+          <td>{{ q.routing.origin_port }}</td>
+          <td>{{ q.routing.destination_port }}</td>
+          <td>{{ q.logistics.shipping_line }}</td>
+          <td>{{ q.dates.valid_from }}</td>
+          <td>{{ q.dates.valid_till }}</td>
+          <td>{{ q.total_amount | number:'1.2-2' }}</td>
+          <td>{{ q.currency }}</td>
+          <td class="actions-cell">
+            <button class="btn-action btn-view" (click)="viewDetails(q.id)" title="Ver detalles">
+              👁️
+            </button>
+            <button class="btn-action btn-edit" (click)="editQuotation(q.id)" title="Editar">
+              ✏️
+            </button>
+            <button class="btn-action btn-delete" (click)="deleteQuotation(q.id)" title="Eliminar">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && filteredQuotations.length === 0 && !error" class="empty-state">
+    <p>No hay cotizaciones marítimas disponibles</p>
+    <button class="btn-primary" (click)="createQuotation()">Crear primera cotización</button>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+<div class="min-h-screen flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md">
+    <!-- Logo Section -->
+    <div class="text-center mb-8">
+      <div class="inline-flex">
+        <img src="/alonso.jpeg" alt="LogiBotIA Logo" class="w-120 h-24 rounded-lg shadow-lg">
+      </div>
+      <h2 class="mt-6 text-3xl font-bold text-gray-900">LogiBotIA</h2>
+      <p class="mt-2 text-gray-600">Sign in to your account</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="error" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+      <p class="text-red-700 text-sm">{{ error }}</p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Username Field -->
+        <div class="mb-6">
+          <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            class="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+            placeholder="Ingresa tu nombre de usuario o email"
+            [class.border-red-500]="submitted && f['username'].invalid"
+          />
+          <div *ngIf="submitted && f['username'].invalid" class="mt-2 text-red-600 text-sm">
+            <p *ngIf="f['username'].errors?.['required']">El usuario es requerido</p>
+            <p *ngIf="f['username'].errors?.['minlength']">Debe de tener almenos 3 caracteres</p>
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-6">
+          <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+          <div class="relative">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              class="mt-2 w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              placeholder="Ingresa tu contraseña"
+              [class.border-red-500]="submitted && f['password'].invalid"
+            />
+            <button type="button" (click)="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+              <svg *ngIf="!showPassword" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+              <svg *ngIf="showPassword" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+              </svg>
+            </button>
+          </div>
+          <div *ngIf="submitted && f['password'].invalid" class="mt-2 text-red-600 text-sm">
+            <p *ngIf="f['password'].errors?.['required']">Password is required</p>
+            <p *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</p>
+          </div>
+        </div>
+
+        <!-- Remember Me (Optional) -->
+        <div class="mb-6 flex items-center">
+          <input
+            id="remember"
+            type="checkbox"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+          />
+          <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span *ngIf="!loading">Sign In</span>
+          <span *ngIf="loading" class="flex items-center justify-center">
+            <svg class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Signing in...
+          </span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-6 text-center">
+      <p class="text-gray-600 text-sm">
+        Don't have an account?
+        <a href="#" class="text-blue-600 hover:text-blue-700 font-semibold">Sign up</a>
+      </p>
+    </div>
+  </div>
+</div>

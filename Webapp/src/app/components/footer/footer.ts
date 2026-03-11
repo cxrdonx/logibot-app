@@ -1,0 +1,51 @@
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-footer',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: `
+    <footer class="bg-white p-3 border-t border-gray-200">
+      <div class="relative flex items-center gap-2">
+        <input
+          [(ngModel)]="inputText"
+          (keydown.enter)="send()"
+          [disabled]="isDisabled"
+          type="text"
+          placeholder="Ej: A Mixco con Nixon, 23 toneladas..."
+          class="w-full bg-slate-100 text-slate-800 text-sm rounded-full pl-4 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder-slate-400 shadow-inner disabled:opacity-60"
+        >
+        <button
+          (click)="send()"
+          [disabled]="!inputText.trim() || isDisabled"
+          class="absolute right-1 top-1 bottom-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white p-2 rounded-full transition-all shadow-md flex items-center justify-center aspect-square"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <p class="text-[10px] text-center text-gray-400 mt-2">
+        Conectado a AWS API Gateway
+      </p>
+    </footer>
+  `,
+  styles: [`
+    input:focus {
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+  `]
+})
+export class FooterComponent {
+  @Input() isDisabled: boolean = false;
+  @Output() onSendMessage = new EventEmitter<string>();
+
+  inputText: string = '';
+
+  send() {
+    if (this.inputText.trim()) {
+      this.onSendMessage.emit(this.inputText);
+      this.inputText = '';
+    }
+  }
+}

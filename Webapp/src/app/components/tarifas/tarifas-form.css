@@ -1,0 +1,260 @@
+.form-container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 30px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
+}
+
+.form-header {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header h1 {
+  margin: 0;
+  color: #333;
+  font-size: 28px;
+}
+
+.tarifa-form {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 25px;
+  background: #fafafa;
+}
+
+.form-section legend {
+  font-weight: 600;
+  color: #333;
+  padding: 0 10px;
+  font-size: 16px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #555;
+  font-size: 14px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn-save,
+.btn-cancel,
+.btn-remove,
+.btn-add-rango {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: 14px;
+}
+
+.btn-save {
+  background-color: #28a745;
+  color: white;
+  min-width: 150px;
+}
+
+.btn-save:hover {
+  background-color: #218838;
+}
+
+.btn-cancel {
+  background-color: #6c757d;
+  color: white;
+  min-width: 150px;
+}
+
+.btn-cancel:hover {
+  background-color: #545b62;
+}
+
+.btn-remove {
+  background-color: #dc3545;
+  color: white;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn-remove:hover {
+  background-color: #c82333;
+}
+
+.btn-add-rango {
+  background-color: #007bff;
+  color: white;
+  align-self: flex-end;
+}
+
+.btn-add-rango:hover {
+  background-color: #0056b3;
+}
+
+.rango-list {
+  margin-bottom: 20px;
+}
+
+.rango-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.rango-info {
+  flex: 1;
+  color: #555;
+  font-size: 14px;
+}
+
+.add-rango-section {
+  background: white;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-top: 15px;
+}
+
+.add-rango-section h4 {
+  margin-top: 0;
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  animation: slideDown 0.3s ease;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 8px;
+}
+
+.loading p {
+  color: #666;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    padding: 15px;
+    margin: 15px auto;
+  }
+
+  .tarifa-form {
+    padding: 15px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-save,
+  .btn-cancel {
+    width: 100%;
+  }
+
+  .add-rango-section .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-add-rango {
+    width: 100%;
+    align-self: stretch;
+  }
+
+  .rango-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .btn-remove {
+    width: 100%;
+  }
+}

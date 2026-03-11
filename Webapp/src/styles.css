@@ -1,0 +1,33 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Reset y normalización básica */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Por defecto, permitir scroll */
+html {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Asegurar que el app-root ocupe todo el espacio */
+app-root {
+  display: block;
+  min-height: 100%;
+  width: 100%;
+}

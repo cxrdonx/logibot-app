@@ -1,0 +1,2 @@
+export default `*{margin:0;padding:0;box-sizing:border-box}html{height:100%;width:100%;overflow-x:hidden;overflow-y:auto}body{min-height:100%;width:100%;overflow-x:hidden;overflow-y:auto;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}app-root{display:block;min-height:100%;width:100%}
+`;
