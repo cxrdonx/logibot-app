@@ -29,32 +29,32 @@
         }
       }
     },
-    "300feacb6fb658f8e3b28676eb06578e650c51a6a58e25bc57455b561c03074b": {
+    "c63d9068e766073722fcda7e70258edc85418365d25b6a6a8bb1c28bf0eb2269": {
       "displayName": "IaProjectStack Template",
       "source": {
         "path": "IaProjectStack.template.json",
         "packaging": "file"
       },
       "destinations": {
-        "current_account-current_region-13cef71f": {
+        "current_account-current_region-6ac099b8": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "300feacb6fb658f8e3b28676eb06578e650c51a6a58e25bc57455b561c03074b.json",
+          "objectKey": "c63d9068e766073722fcda7e70258edc85418365d25b6a6a8bb1c28bf0eb2269.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }
     }
   },
   "dockerImages": {
-    "95f1dd785033a665ad8b926601bb77c49e51b622de5324086919d01e65e0e4cc": {
+    "a05426841709d9806d2488de65994cdb45ce59368e8b887014cc7146638e6a8e": {
       "displayName": "Backend/ChatbotTerrestreHandler/AssetImage",
       "source": {
-        "directory": "asset.95f1dd785033a665ad8b926601bb77c49e51b622de5324086919d01e65e0e4cc",
+        "directory": "asset.a05426841709d9806d2488de65994cdb45ce59368e8b887014cc7146638e6a8e",
         "platform": "linux/amd64"
       },
       "destinations": {
-        "current_account-current_region-f2b952b3": {
+        "current_account-current_region-1e47d876": {
           "repositoryName": "cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}",
-          "imageTag": "95f1dd785033a665ad8b926601bb77c49e51b622de5324086919d01e65e0e4cc",
+          "imageTag": "a05426841709d9806d2488de65994cdb45ce59368e8b887014cc7146638e6a8e",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-image-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }
