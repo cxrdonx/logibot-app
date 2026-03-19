@@ -2,8 +2,8 @@
 
 <div class="tarifas-container">
   <div class="tarifas-header">
-    <h1>Cotizaciones Marítimas</h1>
-    <button class="btn-primary" (click)="createQuotation()">+ Nueva Cotización</button>
+    <h1>Tarifas Marítimas</h1>
+    <button class="btn-primary" (click)="createQuotation()">+ Nueva Tarifa</button>
   </div>
 
   <!-- Success/Error Messages -->
@@ -19,13 +19,13 @@
     <h3>Buscar</h3>
     <div class="filter-row">
       <div class="filter-group">
-        <label for="filterText">Número de cotización / Puerto origen / Puerto destino</label>
+        <label for="filterText">Puerto origen / Puerto destino / Naviera</label>
         <input
           id="filterText"
           type="text"
           [(ngModel)]="filterText"
           (ngModelChange)="applyFilter()"
-          placeholder="Ej: Q-000793 o ROTTERDAM o PUERTO BARRIOS"
+          placeholder="Ej: ROTTERDAM o PUERTO BARRIOS o MAERSK"
           class="filter-input"
         />
       </div>
@@ -38,15 +38,14 @@
 
   <!-- Loading State -->
   <div *ngIf="loading" class="loading">
-    <p>Cargando cotizaciones...</p>
+    <p>Cargando tarifas...</p>
   </div>
 
-  <!-- Quotations Table -->
+  <!-- Tarifas Table -->
   <div *ngIf="!loading && filteredQuotations.length > 0" class="tarifas-table-container">
     <table class="tarifas-table">
       <thead>
         <tr>
-          <th>Cotización #</th>
           <th>Puerto Origen</th>
           <th>Puerto Destino</th>
           <th>Naviera</th>
@@ -59,7 +58,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let q of filteredQuotations" class="tarifa-row">
-          <td><strong>{{ q.quotation_number }}</strong></td>
           <td>{{ q.routing.origin_port }}</td>
           <td>{{ q.routing.destination_port }}</td>
           <td>{{ q.logistics.shipping_line }}</td>
@@ -85,7 +83,7 @@
 
   <!-- Empty State -->
   <div *ngIf="!loading && filteredQuotations.length === 0 && !error" class="empty-state">
-    <p>No hay cotizaciones marítimas disponibles</p>
-    <button class="btn-primary" (click)="createQuotation()">Crear primera cotización</button>
+    <p>No hay tarifas marítimas disponibles</p>
+    <button class="btn-primary" (click)="createQuotation()">Crear primera tarifa</button>
   </div>
 </div>

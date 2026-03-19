@@ -65,7 +65,7 @@ npm run serve:ssr:LogiBotIA
 
 Lambda functions in `Backend/lambda/`:
 - `tarifas_crud/` — CRUD handlers (create.py, read.py, update.py, delete.py) for `/tarifas` REST endpoints
-- `chatbot/chatbot_v2.py` — AI chatbot using Amazon Nova Pro via Bedrock; supports multi-turn conversations with the last 10 messages kept as history; queries DynamoDB for tariff context
+- `chatbot/chatbot_terrestre.py` — AI chatbot using Amazon Nova Pro via Bedrock; supports multi-turn conversations with the last 10 messages kept as history; queries DynamoDB for tariff context
 - `data_loader/dynamo_load_data.py` — One-time data seeder
 
 **API Base URL:** `https://evukogmlq2.execute-api.us-east-1.amazonaws.com/prod/tarifas`

@@ -1,6 +1,7 @@
-import { Component, Input, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Message, XMLQuotation } from '../../models/types';
+import { CotizacionesService, SaveCotizacionRequest } from '../../services/cotizaciones.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -17,15 +18,25 @@ import autoTable from 'jspdf-autotable';
         </span>
       </div>
 
-      <div *ngFor="let msg of messages" class="flex w-full" [ngClass]="msg.sender === 'user' ? 'justify-end' : 'justify-start'">
+      <div *ngFor="let msg of messages" class="flex w-full gap-2" [ngClass]="msg.sender === 'user' ? 'justify-end' : 'justify-start'">
 
-        <div class="max-w-[90%] flex flex-col gap-1">
+        <!-- Bot avatar -->
+        <div *ngIf="msg.sender === 'bot' || msg.isError" class="flex-shrink-0 self-end mb-5">
+          <div class="w-7 h-7 rounded-full bg-[#050D9E] flex items-center justify-center shadow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/>
+              <path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="max-w-[78%] flex flex-col gap-1" [ngClass]="msg.sender === 'user' ? 'items-end' : 'items-start'">
 
           <div [ngClass]="{
-            'text-white rounded-2xl rounded-tr-none shadow-md': msg.sender === 'user' && !msg.isError,
-            'bg-white text-gray-800 rounded-2xl rounded-tl-none shadow-sm border border-gray-100': msg.sender === 'bot' && !msg.isError,
-            'bg-red-50 text-red-800 border border-red-200 rounded-2xl rounded-tl-none': msg.isError
-          }" [style.background-color]="msg.sender === 'user' && !msg.isError ? '#050D9E' : ''" class="p-3 transition-all duration-300">
+            'text-white rounded-2xl rounded-br-none shadow-md': msg.sender === 'user' && !msg.isError,
+            'bg-white text-gray-800 rounded-2xl rounded-bl-none shadow-sm border border-gray-100': msg.sender === 'bot' && !msg.isError,
+            'bg-red-50 text-red-800 border border-red-200 rounded-2xl rounded-bl-none': msg.isError
+          }" [style.background-color]="msg.sender === 'user' && !msg.isError ? '#050D9E' : ''" class="px-4 py-3 transition-all duration-300">
 
             <p *ngIf="msg.text" class="text-sm whitespace-pre-wrap leading-relaxed">{{ msg.text }}</p>
 
@@ -245,8 +256,8 @@ import autoTable from 'jspdf-autotable';
               </div>
 
               <!-- Botón de Acción -->
-              <button 
-                (click)="generateQuotationPDF(msg.data)" 
+              <button
+                (click)="openSaveModal(msg.data)"
                 class="w-full mt-3 bg-[#050D9E] hover:bg-[#040b7a] text-white text-sm py-3 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-95 transform">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
                 Aceptar Cotización
@@ -259,17 +270,69 @@ import autoTable from 'jspdf-autotable';
             {{ msg.sender === 'bot' ? 'LogiBot AI' : 'Tú' }} • {{ msg.timestamp | date:'shortTime' }}
           </span>
         </div>
+
+        <!-- User avatar -->
+        <div *ngIf="msg.sender === 'user'" class="flex-shrink-0 self-end mb-5">
+          <div class="w-7 h-7 rounded-full bg-slate-600 flex items-center justify-center shadow text-white text-xs font-bold">
+            Tú
+          </div>
+        </div>
+
       </div>
 
-      <div *ngIf="isTyping" class="flex justify-start animate-fade-in p-4 pt-0">
-          <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 flex gap-1 items-center">
-            <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
-            <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce delay-100"></div>
-            <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce delay-200"></div>
+      <div *ngIf="isTyping" class="flex justify-start gap-2 animate-fade-in p-4 pt-0">
+        <div class="flex-shrink-0 self-end">
+          <div class="w-7 h-7 rounded-full bg-[#050D9E] flex items-center justify-center shadow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/>
+              <path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>
+            </svg>
           </div>
+        </div>
+        <div class="bg-white px-4 py-3 rounded-2xl rounded-bl-none shadow-sm border border-gray-100 flex gap-1 items-center">
+          <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
+          <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce delay-100"></div>
+          <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce delay-200"></div>
+        </div>
       </div>
 
       <div #scrollEnd></div>
+    </div>
+
+    <!-- MODAL: Confirmar guardar cotización -->
+    <div *ngIf="showConfirmModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#050D9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-gray-800">Guardar Cotización</h3>
+        </div>
+        <p class="text-sm text-gray-600 mb-2">¿Seguro que deseas almacenar esta cotización?</p>
+        <p class="text-sm font-bold text-[#050D9E] mb-4">Número: {{ pendingQNumber }}</p>
+        <div *ngIf="saveError" class="text-xs text-red-600 bg-red-50 p-2 rounded mb-3 border border-red-200">{{ saveError }}</div>
+        <div class="flex gap-3">
+          <button
+            (click)="cancelSave()"
+            [disabled]="savingCotizacion"
+            class="flex-1 py-2.5 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors">
+            Cancelar
+          </button>
+          <button
+            (click)="confirmSave()"
+            [disabled]="savingCotizacion"
+            class="flex-1 py-2.5 rounded-lg bg-[#050D9E] hover:bg-[#040b7a] text-white text-sm font-medium disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
+            <span *ngIf="savingCotizacion" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+            {{ savingCotizacion ? 'Guardando...' : 'Confirmar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast de éxito -->
+    <div *ngIf="saveSuccess" class="fixed bottom-6 right-6 bg-green-600 text-white text-sm px-4 py-3 rounded-xl shadow-lg z-50 flex items-center gap-2 animate-fade-in">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ saveSuccess }}
     </div>
   `,
   styles: [`
@@ -292,6 +355,19 @@ export class ChatComponent implements AfterViewChecked {
 
   today: Date = new Date();
 
+  // Modal state for cotizacion confirmation
+  showConfirmModal = false;
+  pendingQuotation: XMLQuotation | null = null;
+  pendingQNumber = '';
+  savingCotizacion = false;
+  saveError: string | null = null;
+  saveSuccess: string | null = null;
+
+  constructor(
+    private cotizacionesService: CotizacionesService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
@@ -300,6 +376,81 @@ export class ChatComponent implements AfterViewChecked {
     try {
       this.scrollEnd.nativeElement.scrollIntoView({ behavior: 'smooth' });
     } catch(err) { }
+  }
+
+  /**
+   * Generates a unique Q-number for the cotizacion
+   */
+  private generateQNumber(): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = 'Q-';
+    for (let i = 0; i < 8; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+
+  /**
+   * Opens the confirmation modal before saving
+   */
+  openSaveModal(quotation: XMLQuotation): void {
+    this.pendingQuotation = quotation;
+    this.pendingQNumber = this.generateQNumber();
+    this.saveError = null;
+    this.showConfirmModal = true;
+  }
+
+  /**
+   * Cancels and closes the modal
+   */
+  cancelSave(): void {
+    this.showConfirmModal = false;
+    this.pendingQuotation = null;
+    this.saveError = null;
+  }
+
+  /**
+   * Confirms: saves cotizacion to API, then generates PDF
+   */
+  confirmSave(): void {
+    if (!this.pendingQuotation) return;
+
+    this.savingCotizacion = true;
+    this.saveError = null;
+
+    const payload: SaveCotizacionRequest = {
+      numero_cotizacion: this.pendingQNumber,
+      tipo: this.pendingQuotation.tipo || 'terrestre',
+      tarifa_id: this.pendingQuotation.tarifa_id || '',
+      datos: this.pendingQuotation.datos_completos ?? this.pendingQuotation,
+    };
+
+    this.cotizacionesService.save(payload).subscribe({
+      next: () => {
+        this.savingCotizacion = false;
+        this.showConfirmModal = false;
+        this.saveSuccess = `Cotización ${this.pendingQNumber} guardada exitosamente`;
+        this.cdr.detectChanges();
+
+        // Generate PDF after saving
+        if (this.pendingQuotation) {
+          this.generateQuotationPDF(this.pendingQuotation);
+        }
+
+        // Clear success message after 4 seconds
+        setTimeout(() => {
+          this.saveSuccess = null;
+          this.cdr.detectChanges();
+        }, 4000);
+        this.pendingQuotation = null;
+      },
+      error: (err) => {
+        this.savingCotizacion = false;
+        this.saveError =
+          'Error al guardar: ' + (err.error?.error || err.message || 'Error desconocido');
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   /**

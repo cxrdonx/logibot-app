@@ -83,12 +83,35 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard]
   },
-  // Maritime chatbot route
+  // Maritime chatbot route - redirected to unified central chatbot
   {
     path: 'chatbot-maritimo',
+    redirectTo: '/'
+  },
+  // Cotizaciones marítimas management view
+  {
+    path: 'cotizaciones/maritimas',
     loadComponent: () =>
-      import('./components/chat-maritimo/chat-maritimo').then(
-        (m) => m.ChatMaritimoComponent
+      import('./components/cotizaciones-maritimas/cotizaciones-maritimas').then(
+        (m) => m.CotizacionesMaritimasComponent
+      ),
+    canActivate: [authGuard]
+  },
+  // Cotizaciones terrestres management view
+  {
+    path: 'cotizaciones/terrestres',
+    loadComponent: () =>
+      import('./components/cotizaciones-terrestres/cotizaciones-terrestres').then(
+        (m) => m.CotizacionesTerrestresComponent
+      ),
+    canActivate: [authGuard]
+  },
+  // Purchase Order — consolidates maritime and terrestrial quotations
+  {
+    path: 'cotizaciones/orden-compra',
+    loadComponent: () =>
+      import('./components/orden-compra/orden-compra').then(
+        (m) => m.OrdenCompraComponent
       ),
     canActivate: [authGuard]
   },

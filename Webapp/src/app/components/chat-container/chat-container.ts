@@ -52,7 +52,7 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   
   // API URL para Chatbot V2
-  private readonly API_URL = 'https://evukogmlq2.execute-api.us-east-1.amazonaws.com/prod/chatbot';
+  private readonly API_URL = 'https://evukogmlq2.execute-api.us-east-1.amazonaws.com/prod/chatbot-central';
   
   // Historial conversacional para enviar al API
   private conversationHistory: ChatbotMessage[] = [];
@@ -115,9 +115,9 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
     
     // Mensaje de bienvenida
     setTimeout(() => {
-      this.addBotMessageWithTypingEffect('👋 Hola. Soy LogiBot AI.\n\nPuedo ayudarte con consultas sobre tarifas de logística.\n\nEjemplo: "¿Cuánto cuesta enviar 26,000 kg de Puerto Quetzal a Mixco?"');
+      this.addBotMessageWithTypingEffect('👋 Hola, soy LogiBot AI, el cotizador inteligente de Alonso Forwarding. ¿En qué puedo ayudarte hoy?\n\nEjemplos:\n- "¿Cuánto cuesta enviar 26,000 kg de Puerto Quetzal a Mixco?"\n- "¿Cotizaciones de contenedor 40HC desde Rotterdam a Puerto Barrios?"');
     }, 500);
-    
+
     this.saveConversations();
   }
 
@@ -169,7 +169,7 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
     
     // Mensaje de bienvenida
     setTimeout(() => {
-      this.addBotMessageWithTypingEffect('👋 Hola. Soy LogiBot AI.\n\nPuedo ayudarte con consultas sobre tarifas de logística.\n\nEjemplo: "¿Cuánto cuesta enviar 26,000 kg de Puerto Quetzal a Mixco?"');
+      this.addBotMessageWithTypingEffect('👋 Hola, soy LogiBot AI, el cotizador inteligente de Alonso Forwarding. ¿En qué puedo ayudarte hoy?\n\nEjemplos:\n- "¿Cuánto cuesta enviar 26,000 kg de Puerto Quetzal a Mixco?"\n- "¿Cotizaciones de contenedor 40HC desde Rotterdam a Puerto Barrios?"');
     }, 500);
   }
 
@@ -210,7 +210,7 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
           this.isTyping = false;
           
           // Agregar respuesta del bot a la UI con efecto de typing
-          this.addBotMessageWithTypingEffect(response.respuesta);
+          this.addBotMessageWithTypingEffect(response.respuesta, response.datos_completos);
           
           // Actualizar historial conversacional
           this.conversationHistory.push({
@@ -330,6 +330,8 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
 
       const quotation: XMLQuotation = {
         proveedor: getText(cotizacion, 'proveedor'),
+        tipo: getText(cotizacion, ':scope > tipo') || undefined,
+        tarifa_id: getText(cotizacion, ':scope > tarifa_id') || undefined,
         ruta: {
           origen: getText(cotizacion, 'ruta > origen'),
           destino: getText(cotizacion, 'ruta > destino')
@@ -374,7 +376,7 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
   /**
    * Agrega un mensaje del bot con efecto de escritura letra por letra
    */
-  private addBotMessageWithTypingEffect(fullText: string): void {
+  private addBotMessageWithTypingEffect(fullText: string, datosCompletos?: any): void {
     console.log('🔵 Iniciando typing effect para:', fullText.substring(0, 50) + '...');
     
     const botMessageId = Date.now();
@@ -385,6 +387,9 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
     if (xmlQuotation) {
       // Si es XML, crear mensaje con tipo 'xml-quotation' sin efecto de typing
       console.log('📋 Cotización XML detectada');
+      if (datosCompletos) {
+        xmlQuotation.datos_completos = datosCompletos;
+      }
       const botMessage: Message = {
         id: botMessageId,
         sender: 'bot',

@@ -178,13 +178,6 @@ class BackendConstruct(Construct):
             projection_type=dynamodb.ProjectionType.ALL
         )
 
-        # GSI 4: Query by quotation number
-        self.maritime_table.add_global_secondary_index(
-            index_name="QuotationNumberIndex",
-            partition_key=dynamodb.Attribute(name="quotation_number", type=dynamodb.AttributeType.STRING),
-            projection_type=dynamodb.ProjectionType.ALL
-        )
-
         # ===== LAMBDA FUNCTIONS FOR MARITIME CRUD =====
 
         # CREATE - Create new maritime quotation
@@ -366,6 +359,98 @@ class BackendConstruct(Construct):
         chatbot_maritimo.add_method("POST",
             apigw.LambdaIntegration(self.chatbot_maritimo_handler)
         )
+
+        # ===== CHATBOT CENTRAL LAMBDA (Docker / ECR — same image) =====
+
+        self.chatbot_central_handler = _lambda.DockerImageFunction(self, "ChatbotCentralHandler",
+            code=_lambda.DockerImageCode.from_image_asset("lambda/chatbot",
+                platform=Platform.LINUX_AMD64,
+                cmd=["chatbot_central.handler"]
+            ),
+            description="AI chatbot centralizado (terrestre + maritimo) con detección automática de dominio",
+            timeout=Duration.seconds(60),
+            memory_size=512,
+            environment={
+                "TABLE_NAME": self.table.table_name,
+                "MARITIME_TABLE_NAME": self.maritime_table.table_name,
+                "REGION": Stack.of(self).region,
+                "MODEL_ID": "amazon.nova-pro-v1:0",
+            }
+        )
+
+        # DynamoDB read access for the central chatbot (both tables)
+        self.table.grant_read_data(self.chatbot_central_handler)
+        self.maritime_table.grant_read_data(self.chatbot_central_handler)
+
+        # Bedrock invocation permission for central chatbot
+        self.chatbot_central_handler.add_to_role_policy(iam.PolicyStatement(
+            actions=["bedrock:InvokeModel"],
+            resources=["*"]
+        ))
+
+        # ===== ENDPOINT CHATBOT CENTRAL =====
+
+        # POST /chatbot-central - Invocar chatbot centralizado (auto-detección de dominio)
+        chatbot_central = self.api.root.add_resource("chatbot-central")
+        chatbot_central.add_method("POST",
+            apigw.LambdaIntegration(self.chatbot_central_handler)
+        )
+
+        # ===== COTIZACIONES TABLE (unified for terrestrial + maritime) =====
+
+        self.cotizaciones_table = dynamodb.Table(self, "CotizacionesTable",
+            table_name="Cotizaciones",
+            partition_key=dynamodb.Attribute(name="id", type=dynamodb.AttributeType.STRING),
+            billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
+            removal_policy=RemovalPolicy.RETAIN
+        )
+
+        # GSI: query by tipo (terrestre/maritimo)
+        self.cotizaciones_table.add_global_secondary_index(
+            index_name="TipoIndex",
+            partition_key=dynamodb.Attribute(name="tipo", type=dynamodb.AttributeType.STRING),
+            projection_type=dynamodb.ProjectionType.ALL
+        )
+
+        # CREATE cotizacion Lambda
+        self.create_cotizacion_handler = _lambda.Function(self, "CreateCotizacionHandler",
+            runtime=_lambda.Runtime.PYTHON_3_9,
+            code=_lambda.Code.from_asset("lambda/cotizaciones_crud"),
+            handler="create.handler",
+            description="Save accepted quotation to Cotizaciones table",
+            environment={"TABLE_NAME": self.cotizaciones_table.table_name}
+        )
+        self.cotizaciones_table.grant_write_data(self.create_cotizacion_handler)
+
+        # READ cotizaciones Lambda
+        self.read_cotizacion_handler = _lambda.Function(self, "ReadCotizacionHandler",
+            runtime=_lambda.Runtime.PYTHON_3_9,
+            code=_lambda.Code.from_asset("lambda/cotizaciones_crud"),
+            handler="read.handler",
+            description="Read cotizaciones",
+            environment={"TABLE_NAME": self.cotizaciones_table.table_name}
+        )
+        self.cotizaciones_table.grant_read_data(self.read_cotizacion_handler)
+
+        # UPDATE cotizacion Lambda
+        self.update_cotizacion_handler = _lambda.Function(self, "UpdateCotizacionHandler",
+            runtime=_lambda.Runtime.PYTHON_3_9,
+            code=_lambda.Code.from_asset("lambda/cotizaciones_crud"),
+            handler="update.handler",
+            description="Update an accepted cotizacion (add seller fields for shipping order)",
+            environment={"TABLE_NAME": self.cotizaciones_table.table_name}
+        )
+        self.cotizaciones_table.grant_write_data(self.update_cotizacion_handler)
+
+        # ===== ENDPOINTS /cotizaciones =====
+
+        cotizaciones_resource = self.api.root.add_resource("cotizaciones")
+        cotizaciones_resource.add_method("POST", apigw.LambdaIntegration(self.create_cotizacion_handler))
+        cotizaciones_resource.add_method("GET", apigw.LambdaIntegration(self.read_cotizacion_handler))
+
+        cotizacion_by_id = cotizaciones_resource.add_resource("{id}")
+        cotizacion_by_id.add_method("GET", apigw.LambdaIntegration(self.read_cotizacion_handler))
+        cotizacion_by_id.add_method("PUT", apigw.LambdaIntegration(self.update_cotizacion_handler))
 
 class IaProjectStack(Stack):
 

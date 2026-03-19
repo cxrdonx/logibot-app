@@ -46,6 +46,9 @@ export interface Message {
 // XML Quotation structure
 export interface XMLQuotation {
   proveedor: string;
+  tipo?: string;       // 'terrestre' | 'maritimo'
+  tarifa_id?: string;  // ID of source tarifa in DynamoDB
+  datos_completos?: any;  // Full source tariff data (populated for maritime quotations)
   ruta: {
     origen: string;
     destino: string;
@@ -106,6 +109,7 @@ export interface ChatbotRequest {
 export interface ChatbotResponse {
   respuesta: string;
   items_found: number;
+  datos_completos?: any;  // Full tariff data for maritime quotations
 }
 
 // Conversation management
@@ -147,7 +151,6 @@ export interface MaritimeTermsAndConditions {
 
 export interface MaritimeQuotation {
   id?: string;
-  quotation_number: string;
   dates: {
     quote_date: string;
     valid_from: string;

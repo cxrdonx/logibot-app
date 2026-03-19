@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -23,7 +23,8 @@ export class TarifasMaritimasListComponent implements OnInit {
 
   constructor(
     private maritimeService: MaritimeQuotationsService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -39,10 +40,12 @@ export class TarifasMaritimasListComponent implements OnInit {
         this.quotations = data;
         this.applyFilter();
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
-        this.error = 'Error al cargar cotizaciones: ' + (err.message ?? 'Error desconocido');
+        this.error = 'Error al cargar tarifas: ' + (err.message ?? 'Error desconocido');
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -55,9 +58,9 @@ export class TarifasMaritimasListComponent implements OnInit {
     }
     this.filteredQuotations = this.quotations.filter(
       (q) =>
-        q.quotation_number.toLowerCase().includes(term) ||
-        q.routing.origin_port.toLowerCase().includes(term) ||
-        q.routing.destination_port.toLowerCase().includes(term)
+        (q.routing?.origin_port ?? '').toLowerCase().includes(term) ||
+        (q.routing?.destination_port ?? '').toLowerCase().includes(term) ||
+        (q.logistics?.shipping_line ?? '').toLowerCase().includes(term)
     );
   }
 
@@ -84,20 +87,22 @@ export class TarifasMaritimasListComponent implements OnInit {
 
   deleteQuotation(id: string | undefined): void {
     if (!id) return;
-    if (!confirm('¿Está seguro de que desea eliminar esta cotización?')) return;
+    if (!confirm('¿Está seguro de que desea eliminar esta tarifa?')) return;
 
     this.loading = true;
     this.maritimeService.delete(id).subscribe({
       next: () => {
-        this.successMessage = 'Cotización eliminada exitosamente';
+        this.successMessage = 'Tarifa eliminada exitosamente';
         this.loadQuotations();
         setTimeout(() => {
           this.successMessage = null;
+          this.cdr.detectChanges();
         }, 3000);
       },
       error: (err) => {
-        this.error = 'Error al eliminar la cotización: ' + (err.message ?? 'Error desconocido');
+        this.error = 'Error al eliminar la tarifa: ' + (err.message ?? 'Error desconocido');
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }

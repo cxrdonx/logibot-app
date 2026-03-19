@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface RangoBasePrice {
   min_kg: number;
@@ -34,7 +35,7 @@ export class TarifasService {
 
   constructor(private http: HttpClient) {}
 
-  // GET all tarifas or filtered
+  // GET all tarifas or filtered — API returns { count, items }
   getTarifas(filters?: { origen?: string; destino?: string; proveedor?: string }): Observable<Tarifa[]> {
     let params = new HttpParams();
 
@@ -44,7 +45,9 @@ export class TarifasService {
       if (filters.proveedor) params = params.set('proveedor', filters.proveedor);
     }
 
-    return this.http.get<Tarifa[]>(this.apiUrl, { params });
+    return this.http.get<{ count: number; items: Tarifa[] }>(this.apiUrl, { params }).pipe(
+      map(res => res.items ?? [])
+    );
   }
 
   // GET single tarifa by ID

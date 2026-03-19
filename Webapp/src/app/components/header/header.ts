@@ -1,7 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { Conversation } from '../../models/types';
+import { SidebarService } from '../../services/sidebar.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -11,25 +13,37 @@ import { Conversation } from '../../models/types';
     <header class="bg-slate-900 text-white p-4 shadow-md z-10">
       <div class="flex justify-between items-center mb-2">
         <div class="flex gap-3 items-center flex-1">
-          <div class="bg-blue-600 p-2 rounded-lg shadow-lg shadow-blue-900/50">
-            <!-- Icono Bot -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-          </div>
-          <div class="flex-1">
-            <h1 class="font-bold text-lg leading-tight">LogiBotAI Alonso Forwarding</h1>
-            <div class="flex items-center gap-1">
-              <span class="w-2 h-2 rounded-full" [ngClass]="isOnline ? 'bg-green-400 animate-pulse' : 'bg-red-500'"></span>
-              <p class="text-[10px] text-blue-200 uppercase tracking-wider">
-                {{ isOnline ? 'Cotizador' : 'Offline' }}
-              </p>
+
+          <!-- Hamburger menu button -->
+          <button (click)="toggleSidebar()" title="Menú"
+            class="flex flex-col gap-1.5 p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer group">
+            <span class="block w-5 h-0.5 bg-white rounded-full transition-all"></span>
+            <span class="block w-5 h-0.5 bg-white rounded-full transition-all"></span>
+            <span class="block w-3.5 h-0.5 bg-white rounded-full transition-all group-hover:w-5"></span>
+          </button>
+
+          <!-- Bot icon + brand -->
+          <div class="flex items-center gap-2.5">
+            <div class="bg-blue-600 p-2 rounded-lg shadow-lg shadow-blue-900/50">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+            </div>
+            <div>
+              <h1 class="font-bold text-lg leading-tight">LogiBotAI Alonso Forwarding</h1>
+              <div class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full" [ngClass]="isOnline ? 'bg-green-400 animate-pulse' : 'bg-red-500'"></span>
+                <p class="text-[10px] text-blue-200 uppercase tracking-wider">
+                  {{ isOnline ? 'Cotizador' : 'Offline' }}
+                </p>
+              </div>
             </div>
           </div>
+
         </div>
         <div class="flex gap-2">
           <button (click)="navigateToTarifas()" class="text-gray-400 hover:text-white transition-colors" title="Gestión de Tarifas">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
           </button>
-          <button (click)="toggleConversations()" class="text-gray-400 hover:text-white transition-colors relative" title="Conversaciones">
+          <button *ngIf="isLogibotView" (click)="toggleConversations()" class="text-gray-400 hover:text-white transition-colors relative" title="Conversaciones">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <span *ngIf="conversations.length > 1" class="absolute -top-1 -right-1 bg-[#050D9E] text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center">
               {{conversations.length}}
@@ -113,8 +127,22 @@ export class HeaderComponent {
   @Output() onLogout = new EventEmitter<void>();
 
   showConversations = false;
+  isLogibotView = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private sidebarService: SidebarService) {
+    this.isLogibotView = this.isChatRoute(this.router.url);
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
+      this.isLogibotView = this.isChatRoute(e.urlAfterRedirects);
+    });
+  }
+
+  private isChatRoute(url: string): boolean {
+    return url === '/' || url.startsWith('/?') || url.includes('chatbot-maritimo');
+  }
+
+  toggleSidebar(): void {
+    this.sidebarService.toggle();
+  }
 
   toggleConversations() {
     this.showConversations = !this.showConversations;

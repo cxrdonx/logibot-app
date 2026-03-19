@@ -11,7 +11,18 @@ import { HeaderComponent } from '../header/header';
   styleUrls: ['./tarifas-selector.css']
 })
 export class TarifasSelectorComponent {
+
+  openMenus: Record<string, boolean> = {
+    terrestres: false,
+    maritimas: false,
+    cotizaciones: false,
+  };
+
   constructor(private router: Router) {}
+
+  toggleMenu(key: string): void {
+    this.openMenus[key] = !this.openMenus[key];
+  }
 
   goTerrestre(): void {
     this.router.navigate(['/tarifas/create']);
@@ -31,6 +42,18 @@ export class TarifasSelectorComponent {
 
   goChatbotMaritimo(): void {
     this.router.navigate(['/chatbot-maritimo']);
+  }
+
+  goCotizacionesMaritimas(): void {
+    this.router.navigate(['/cotizaciones/maritimas']);
+  }
+
+  goCotizacionesTerrestres(): void {
+    this.router.navigate(['/cotizaciones/terrestres']);
+  }
+
+  goOrdenCompra(): void {
+    this.router.navigate(['/cotizaciones/orden-compra']);
   }
 
   goMenu(): void {

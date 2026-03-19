@@ -20,7 +20,6 @@ export type PortInfo = {
 };
 
 export type QuoteDetails = {
-  quotationNumber: string;
   poNumber: string;
   shipmentType: string; // ej: CONTAINER (FCL)
   movementType: string; // ej: DOOR TO PORT
@@ -116,7 +115,6 @@ export class TarifasMaritimasFormComponent implements OnInit {
     origin: { portCodeName: '' },
     destination: { portCodeName: '' },
     details: {
-      quotationNumber: '',
       poNumber: '',
       shipmentType: 'CONTAINER (FCL)',
       movementType: 'DOOR TO PORT',
@@ -163,7 +161,7 @@ export class TarifasMaritimasFormComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        this.error = 'Error al cargar la cotización: ' + (err.message ?? 'Error desconocido');
+        this.error = 'Error al cargar la tarifa: ' + (err.message ?? 'Error desconocido');
       }
     });
   }
@@ -186,7 +184,6 @@ export class TarifasMaritimasFormComponent implements OnInit {
       origin: { portCodeName: data.routing.origin_port ?? '' },
       destination: { portCodeName: data.routing.destination_port ?? '' },
       details: {
-        quotationNumber: data.quotation_number ?? '',
         poNumber: '',
         shipmentType: data.shipment_type ?? 'CONTAINER (FCL)',
         movementType: data.movement_type ?? 'DOOR TO PORT',
@@ -241,7 +238,6 @@ export class TarifasMaritimasFormComponent implements OnInit {
     const totalAmount = lineItems.reduce((sum, li) => sum + li.amount, 0);
 
     const payload: MaritimeQuotation = {
-      quotation_number: this.tarifa.details.quotationNumber,
       dates: {
         quote_date: this.tarifa.quoteInfo.quoteDate,
         valid_from: this.tarifa.quoteInfo.validFrom,
@@ -336,10 +332,6 @@ export class TarifasMaritimasFormComponent implements OnInit {
   save(): void {
     this.error = null;
 
-    if (!this.tarifa.details.quotationNumber) {
-      this.error = 'Quotation # es requerido';
-      return;
-    }
     if (!this.tarifa.origin.portCodeName || !this.tarifa.destination.portCodeName) {
       this.error = 'Origin port y Destination port son requeridos';
       return;
@@ -356,7 +348,7 @@ export class TarifasMaritimasFormComponent implements OnInit {
         },
         error: (err) => {
           this.loading = false;
-          this.error = 'Error al actualizar la cotización: ' + (err.message ?? 'Error desconocido');
+          this.error = 'Error al actualizar la tarifa: ' + (err.message ?? 'Error desconocido');
         }
       });
     } else {
@@ -367,7 +359,7 @@ export class TarifasMaritimasFormComponent implements OnInit {
         },
         error: (err) => {
           this.loading = false;
-          this.error = 'Error al guardar la cotización: ' + (err.message ?? 'Error desconocido');
+          this.error = 'Error al guardar la tarifa: ' + (err.message ?? 'Error desconocido');
         }
       });
     }

@@ -1,0 +1,16 @@
+/* Cotizaciones Terrestres — scoped overrides */
+
+/* Smooth left-border selection indicator */
+.border-l-4 {
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+/* Sticky action buttons */
+.sticky-actions {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  padding: 12px 24px;
+  z-index: 10;
+}

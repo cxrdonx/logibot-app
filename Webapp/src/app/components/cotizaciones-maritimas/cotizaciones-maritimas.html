@@ -1,0 +1,417 @@
+<app-header></app-header>
+<div class="flex h-[calc(100vh-64px)] bg-slate-50 overflow-hidden">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       LEFT PANEL — list
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="w-80 min-w-[280px] border-r border-gray-200 bg-white flex flex-col shadow-sm">
+
+    <!-- Panel header -->
+    <div class="p-4 border-b bg-[#050D9E]">
+      <h2 class="text-white font-bold text-sm">Cotizaciones Marítimas</h2>
+      <p class="text-blue-200 text-xs mt-0.5">{{ totalItems }} cotizaciones</p>
+    </div>
+
+    <!-- Search bar -->
+    <div class="p-3 border-b">
+      <input
+        [(ngModel)]="searchTerm"
+        (input)="applyFilter()"
+        placeholder="Buscar por # o cliente..."
+        class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+    </div>
+
+    <!-- Cotización cards -->
+    <div class="flex-1 overflow-y-auto">
+
+      <div
+        *ngFor="let cot of filtered"
+        (click)="selectCotizacion(cot)"
+        [class.border-[#050D9E]]="selectedId === cot.id"
+        [class.bg-blue-50]="selectedId === cot.id"
+        class="p-3 border-b cursor-pointer hover:bg-slate-50 border-l-4 border-transparent transition-colors"
+      >
+        <div class="flex justify-between items-start mb-1">
+          <span class="font-mono text-xs font-bold text-[#050D9E]">{{ cot.numero_cotizacion }}</span>
+          <span class="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">
+            {{ cot.estado }}
+          </span>
+        </div>
+        <p class="text-xs text-gray-700 font-medium truncate">{{ getCliente(cot) }}</p>
+        <p class="text-[10px] text-gray-400 mt-0.5">
+          {{ cot.datos?.routing?.origin_port?.split(' - ')[0] }}
+          →
+          {{ cot.datos?.routing?.destination_port?.split(' - ')[0] }}
+        </p>
+        <p class="text-[10px] text-gray-400">
+          {{ cot.datos?.logistics?.shipping_line }} · {{ formatDate(cot.fecha_creacion) }}
+        </p>
+      </div>
+
+      <div *ngIf="filtered.length === 0 && !loading" class="p-6 text-center text-gray-400 text-sm">
+        No se encontraron cotizaciones
+      </div>
+
+      <div *ngIf="loading" class="p-6 text-center">
+        <div class="inline-block w-5 h-5 border-2 border-blue-300 border-t-[#050D9E] rounded-full animate-spin"></div>
+        <p class="text-gray-400 text-sm mt-2">Cargando...</p>
+      </div>
+
+    </div>
+
+    <!-- Back button -->
+    <div class="p-3 border-t">
+      <button
+        (click)="goBack()"
+        class="w-full text-xs text-gray-500 hover:text-gray-700 py-1.5 rounded border border-gray-200 hover:bg-gray-50 transition-colors"
+      >
+        ← Volver a Tarifas
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       RIGHT PANEL — edit form
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="flex-1 overflow-y-auto" *ngIf="selected; else noSelection">
+    <div class="max-w-4xl mx-auto p-6 pb-32">
+
+      <!-- ── Title bar ── -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-xl font-bold text-gray-800">{{ selected.numero_cotizacion }}</h1>
+          <p class="text-sm text-gray-500">Creada el {{ formatDate(selected.fecha_creacion) }}</p>
+        </div>
+        <div class="flex gap-3">
+          <button
+            (click)="saveChanges()"
+            [disabled]="saving"
+            class="flex items-center gap-2 bg-[#050D9E] text-white px-4 py-2 rounded-lg text-sm
+                   font-medium disabled:opacity-50 hover:bg-[#040b7a] transition-colors"
+          >
+            <span
+              *ngIf="saving"
+              class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"
+            ></span>
+            <span *ngIf="!saving">💾</span>
+            Actualizar
+          </button>
+          <button
+            (click)="generateOrdenEmbarque(selected)"
+            class="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm
+                   font-medium hover:bg-emerald-700 transition-colors"
+          >
+            📄 Generar Orden de Embarque
+          </button>
+        </div>
+      </div>
+
+      <!-- Toast messages -->
+      <div
+        *ngIf="saveSuccess"
+        class="mb-4 bg-green-50 border border-green-200 text-green-800 px-4 py-2 rounded-lg text-sm"
+      >
+        ✓ {{ saveSuccess }}
+      </div>
+      <div
+        *ngIf="saveError"
+        class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-2 rounded-lg text-sm"
+      >
+        ⚠ {{ saveError }}
+      </div>
+
+
+      <!-- ── SECTION 1: Información del Cliente ── -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-4">
+        <h3 class="font-bold text-gray-700 text-sm mb-4 flex items-center gap-2">
+          <span>👤</span> Información del Cliente
+        </h3>
+        <div class="grid grid-cols-2 gap-4">
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Cliente</label>
+            <input [(ngModel)]="form.cliente" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Contacto</label>
+            <input [(ngModel)]="form.contacto" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Incoterm</label>
+            <input [(ngModel)]="form.incoterm" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Tipo de Servicio</label>
+            <input
+              value="Marítimo"
+              readonly
+              class="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-500"
+            />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Shipper</label>
+            <input [(ngModel)]="form.shipper" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Consignee</label>
+            <input [(ngModel)]="form.consignee" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div class="col-span-2">
+            <label class="text-xs text-gray-500 font-medium">Descripción del Producto</label>
+            <input [(ngModel)]="form.descripcion_producto" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Valor FOB</label>
+            <input [(ngModel)]="form.valor_fob" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- ── SECTION 2: Detalles de la Ruta ── -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-4">
+        <h3 class="font-bold text-gray-700 text-sm mb-4 flex items-center gap-2">
+          <span>🚢</span> Detalles de la Ruta
+        </h3>
+        <div class="grid grid-cols-2 gap-4">
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">POL (Puerto de Carga)</label>
+            <input [(ngModel)]="form.pol" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">POD (Puerto de Descarga)</label>
+            <input [(ngModel)]="form.pod" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Transbordo vía</label>
+            <input [(ngModel)]="form.via_port" placeholder="N/A" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Tipo de Contenedor</label>
+            <input [(ngModel)]="form.tipo_contenedor" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Naviera</label>
+            <input [(ngModel)]="form.naviera" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Kilos Gross</label>
+            <input [(ngModel)]="form.kilos_gross" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Piezas</label>
+            <input [(ngModel)]="form.piezas" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Dim</label>
+            <input [(ngModel)]="form.dim" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Volumen (CBM)</label>
+            <input [(ngModel)]="form.volumen" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Peso Volumen</label>
+            <input [(ngModel)]="form.peso_volumen" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Tiempo de Tránsito (días)</label>
+            <input
+              type="number"
+              [(ngModel)]="form.transit_time"
+              class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Días Libres</label>
+            <input [(ngModel)]="form.dias_libres_display" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- ── SECTION 3: Detalles de Costos ── -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-4">
+
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-bold text-gray-700 text-sm flex items-center gap-2">
+            <span>💰</span> Detalles de Costos
+          </h3>
+          <button
+            (click)="addLineItem()"
+            class="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1 rounded-lg hover:bg-blue-100 transition-colors"
+          >
+            + Agregar línea
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-50 text-xs text-gray-500 uppercase">
+                <th class="text-left p-2 font-semibold">Concepto</th>
+                <th class="p-2 font-semibold text-center">Cantidad</th>
+                <th class="p-2 font-semibold text-center">Base</th>
+                <th class="p-2 font-semibold text-center">Moneda</th>
+                <th class="p-2 font-semibold text-right">P. Unitario</th>
+                <th class="p-2 font-semibold text-right">Total</th>
+                <th class="p-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let li of form.line_items; let i = index" class="border-t border-gray-100">
+                <td class="p-1">
+                  <input
+                    [(ngModel)]="li.description"
+                    class="w-full border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </td>
+                <td class="p-1">
+                  <input
+                    type="number"
+                    [(ngModel)]="li.quantity"
+                    (input)="recalcItem(i)"
+                    class="w-16 border border-gray-300 rounded px-2 py-1 text-xs text-center focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </td>
+                <td class="p-1">
+                  <input
+                    [(ngModel)]="li.unit"
+                    class="w-20 border border-gray-300 rounded px-2 py-1 text-xs text-center focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </td>
+                <td class="p-1">
+                  <input
+                    [(ngModel)]="li.currency"
+                    class="w-14 border border-gray-300 rounded px-2 py-1 text-xs text-center focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </td>
+                <td class="p-1">
+                  <input
+                    type="number"
+                    [(ngModel)]="li.unit_price"
+                    (input)="recalcItem(i)"
+                    class="w-20 border border-gray-300 rounded px-2 py-1 text-xs text-right focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </td>
+                <td class="p-1 text-right text-xs font-medium text-gray-700">
+                  {{ li.amount.toFixed(2) }}
+                </td>
+                <td class="p-1">
+                  <button
+                    (click)="removeLineItem(i)"
+                    class="text-red-400 hover:text-red-600 text-xs px-1 transition-colors"
+                    title="Eliminar fila"
+                  >
+                    ✕
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="form.line_items.length === 0" class="border-t border-gray-100">
+                <td colspan="7" class="p-4 text-center text-xs text-gray-400">
+                  Sin ítems de costo. Haz clic en "+ Agregar línea" para comenzar.
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="border-t-2 border-gray-300 font-bold bg-gray-50">
+                <td colspan="4" class="p-2 text-right text-sm text-gray-700">TOTAL</td>
+                <td class="p-2 text-right text-sm text-gray-500">{{ form.currency }}</td>
+                <td class="p-2 text-right text-sm text-gray-800">{{ calcTotal().toFixed(2) }}</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="mt-3 flex items-center gap-3">
+          <label class="text-xs text-gray-500 font-medium">Moneda:</label>
+          <input
+            [(ngModel)]="form.currency"
+            class="border border-gray-300 rounded-lg px-2 py-1 text-xs w-20 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          />
+        </div>
+
+      </div>
+
+
+      <!-- ── SECTION 4: Información del Vendedor ── -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-4">
+        <h3 class="font-bold text-gray-700 text-sm mb-4 flex items-center gap-2">
+          <span>📋</span> Información del Vendedor (PDF)
+        </h3>
+        <div class="grid grid-cols-1 gap-4">
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Nombre del Vendedor</label>
+            <input
+              [(ngModel)]="form.vendedor_nombre"
+              class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Datos de Contacto</label>
+            <textarea
+              [(ngModel)]="form.vendedor_contacto"
+              rows="2"
+              class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-blue-400"
+            ></textarea>
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-500 font-medium">Notas Adicionales</label>
+            <textarea
+              [(ngModel)]="form.notas_adicionales"
+              rows="5"
+              placeholder="Notas que aparecerán al pie de la cotización PDF..."
+              class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono text-xs resize-y focus:outline-none focus:ring-2 focus:ring-blue-400"
+            ></textarea>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /max-w-4xl -->
+  </div><!-- /right panel -->
+
+
+  <!-- No selection placeholder -->
+  <ng-template #noSelection>
+    <div class="flex-1 flex items-center justify-center text-gray-400">
+      <div class="text-center">
+        <p class="text-6xl mb-4">🚢</p>
+        <p class="text-sm font-medium text-gray-500">Selecciona una cotización para editarla</p>
+        <p class="text-xs text-gray-400 mt-1">
+          Las cotizaciones marítimas aceptadas aparecen en el panel izquierdo
+        </p>
+      </div>
+    </div>
+  </ng-template>
+
+</div>

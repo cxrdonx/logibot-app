@@ -26,7 +26,6 @@ import { FormsModule } from '@angular/forms';
         </button>
       </div>
       <p class="text-[10px] text-center text-gray-400 mt-2">
-        Conectado a AWS API Gateway
       </p>
     </footer>
   `,

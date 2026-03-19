@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -28,7 +28,8 @@ export class TarifasListComponent implements OnInit {
   constructor(
     private tarifasService: TarifasService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -62,10 +63,12 @@ export class TarifasListComponent implements OnInit {
         this.tarifas = data;
         this.filteredTarifas = [...this.tarifas];
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.error = 'Error loading tarifas: ' + err.message;
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -102,11 +105,13 @@ export class TarifasListComponent implements OnInit {
           this.loadTarifas();
           setTimeout(() => {
             this.successMessage = null;
+            this.cdr.detectChanges();
           }, 3000);
         },
         error: (err) => {
           this.error = 'Error al eliminar tarifa: ' + err.message;
           this.loading = false;
+          this.cdr.detectChanges();
         }
       });
     }

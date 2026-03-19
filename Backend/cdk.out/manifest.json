@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c63d9068e766073722fcda7e70258edc85418365d25b6a6a8bb1c28bf0eb2269.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/6dcd376387185e89207c2c29802c9af434e69d6209d0fff1e22b0d778f672de0.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -859,21 +859,6 @@
             "type": "aws:cdk:hasPhysicalName",
             "data": {
               "Ref": "BackendMaritimeQuotationsTableFDF89FB0"
-            }
-          },
-          {
-            "type": "aws:cdk:analytics:method",
-            "data": {
-              "addGlobalSecondaryIndex": [
-                {
-                  "indexName": "*",
-                  "projectionType": "ALL",
-                  "partitionKey": {
-                    "name": "*",
-                    "type": "S"
-                  }
-                }
-              ]
             }
           },
           {
@@ -1836,12 +1821,100 @@
                 {}
               ]
             }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToLogicalId": [
+                {}
+              ]
+            }
           }
         ],
         "/IaProjectStack/Backend/IaProjectApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BackendIaProjectApiDeployment0F8302BE5c32032bef3d02be89f8bf457a86a189"
+            "data": "BackendIaProjectApiDeployment0F8302BEa9734ade43d556466b551c8cc37a53cb"
           }
         ],
         "/IaProjectStack/Backend/IaProjectApi/DeploymentStage.prod": [
@@ -2593,6 +2666,931 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "BackendIaProjectApichatbotmaritimoPOST104A2A47"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-central": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "parent": "*",
+              "pathPart": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-central/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotcentral04F21EC7"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-central/OPTIONS": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": {
+                "authorizer": {
+                  "authorizerId": "*",
+                  "authorizationType": "*"
+                },
+                "apiKeyRequired": false,
+                "authorizationType": "*",
+                "methodResponses": [
+                  {
+                    "statusCode": "*",
+                    "responseParameters": "*"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addMethodResponse": [
+                {
+                  "statusCode": "*",
+                  "responseParameters": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-central/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotcentralOPTIONS4C80FA6C"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-central/POST": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-central/POST/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.POST..chatbot-central": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotcentralPOSTApiPermissionIaProjectStackBackendIaProjectApi07215FF3POSTchatbotcentral3DCCE252"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-central/POST/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.POST..chatbot-central": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotcentralPOSTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3POSTchatbotcentral0D565CC9"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/chatbot-central/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApichatbotcentralPOSTCA880872"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "parent": "*",
+              "pathPart": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizaciones279B0933"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/OPTIONS": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": {
+                "authorizer": {
+                  "authorizerId": "*",
+                  "authorizationType": "*"
+                },
+                "apiKeyRequired": false,
+                "authorizationType": "*",
+                "methodResponses": [
+                  {
+                    "statusCode": "*",
+                    "responseParameters": "*"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addMethodResponse": [
+                {
+                  "statusCode": "*",
+                  "responseParameters": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesOPTIONSF714B3C5"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/POST": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/POST/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.POST..cotizaciones": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesPOSTApiPermissionIaProjectStackBackendIaProjectApi07215FF3POSTcotizaciones7B19EA44"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/POST/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.POST..cotizaciones": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesPOSTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3POSTcotizacionesBF897DE8"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesPOST77B014F1"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/GET": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/GET/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.GET..cotizaciones": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesGETApiPermissionIaProjectStackBackendIaProjectApi07215FF3GETcotizaciones2343603D"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/GET/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.GET..cotizaciones": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesGETApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3GETcotizacionesAD0FC598"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesGET5D93806B"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "parent": "*",
+              "pathPart": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesidD85149E4"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/OPTIONS": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": {
+                "authorizer": {
+                  "authorizerId": "*",
+                  "authorizationType": "*"
+                },
+                "apiKeyRequired": false,
+                "authorizationType": "*",
+                "methodResponses": [
+                  {
+                    "statusCode": "*",
+                    "responseParameters": "*"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addMethodResponse": [
+                {
+                  "statusCode": "*",
+                  "responseParameters": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesidOPTIONS56252F17"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/GET": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/GET/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.GET..cotizaciones.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesidGETApiPermissionIaProjectStackBackendIaProjectApi07215FF3GETcotizacionesid223C7C96"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/GET/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.GET..cotizaciones.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesidGETApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3GETcotizacionesid57769F0E"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesidGET3F77769D"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/PUT": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "resource": "*",
+              "httpMethod": "*",
+              "integration": "*",
+              "options": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/PUT/ApiPermission.IaProjectStackBackendIaProjectApi07215FF3.PUT..cotizaciones.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesidPUTApiPermissionIaProjectStackBackendIaProjectApi07215FF3PUTcotizacionesid1B3036B5"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/PUT/ApiPermission.Test.IaProjectStackBackendIaProjectApi07215FF3.PUT..cotizaciones.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesidPUTApiPermissionTestIaProjectStackBackendIaProjectApi07215FF3PUTcotizacionesidBC8DF295"
+          }
+        ],
+        "/IaProjectStack/Backend/IaProjectApi/Default/cotizaciones/{id}/PUT/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendIaProjectApicotizacionesidPUT28D84C2C"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotCentralHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "memorySize": "*",
+              "timeout": "*",
+              "code": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {}
+          },
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "memorySize": "*",
+              "timeout": "*",
+              "code": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotCentralHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotCentralHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotCentralHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotCentralHandlerServiceRoleCE2A940E"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotCentralHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotCentralHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotCentralHandlerServiceRoleDefaultPolicy120823A6"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotCentralHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotCentralHandlerCBAF7AB5"
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotCentralHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ChatbotCentralHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendChatbotCentralHandlerLogGroup10FF4396"
+          }
+        ],
+        "/IaProjectStack/Backend/CotizacionesTable": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "partitionKey": {
+                "name": "*",
+                "type": "S"
+              },
+              "billingMode": "PAY_PER_REQUEST",
+              "removalPolicy": "retain",
+              "tableName": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "BackendCotizacionesTableA98D9F14"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addGlobalSecondaryIndex": [
+                {
+                  "indexName": "*",
+                  "projectionType": "ALL",
+                  "partitionKey": {
+                    "name": "*",
+                    "type": "S"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CotizacionesTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCotizacionesTableA98D9F14"
+          }
+        ],
+        "/IaProjectStack/Backend/CotizacionesTable/ScalingRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateCotizacionHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateCotizacionHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateCotizacionHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateCotizacionHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateCotizacionHandlerServiceRole56FC7F1C"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateCotizacionHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateCotizacionHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateCotizacionHandlerServiceRoleDefaultPolicy11F4F9AD"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateCotizacionHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateCotizacionHandler7275F2CC"
+          }
+        ],
+        "/IaProjectStack/Backend/CreateCotizacionHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/CreateCotizacionHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendCreateCotizacionHandlerLogGroup4B7187FB"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadCotizacionHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadCotizacionHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadCotizacionHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadCotizacionHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadCotizacionHandlerServiceRole9449702E"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadCotizacionHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadCotizacionHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadCotizacionHandlerServiceRoleDefaultPolicyDEA0C3DE"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadCotizacionHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadCotizacionHandler54644921"
+          }
+        ],
+        "/IaProjectStack/Backend/ReadCotizacionHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/ReadCotizacionHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendReadCotizacionHandlerLogGroupC72B6811"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateCotizacionHandler": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "description": "*",
+              "environment": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEnvironment": [
+                "*",
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateCotizacionHandler/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateCotizacionHandler/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateCotizacionHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateCotizacionHandlerServiceRoleAEC0408D"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateCotizacionHandler/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateCotizacionHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateCotizacionHandlerServiceRoleDefaultPolicy82691260"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateCotizacionHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateCotizacionHandler87E737E8"
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateCotizacionHandler/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/IaProjectStack/Backend/UpdateCotizacionHandler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackendUpdateCotizacionHandlerLogGroup1BCF3E8C"
           }
         ],
         "/IaProjectStack/CDKMetadata/Default": [

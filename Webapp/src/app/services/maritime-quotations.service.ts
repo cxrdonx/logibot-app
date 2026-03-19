@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { MaritimeQuotation } from '../models/types';
 
 @Injectable({
@@ -11,9 +12,11 @@ export class MaritimeQuotationsService {
 
   constructor(private http: HttpClient) {}
 
-  // GET all maritime quotations
+  // GET all maritime tarifas — API returns { count, items }
   getAll(): Observable<MaritimeQuotation[]> {
-    return this.http.get<MaritimeQuotation[]>(this.apiUrl);
+    return this.http.get<{ count: number; items: MaritimeQuotation[] }>(this.apiUrl).pipe(
+      map(res => res.items ?? [])
+    );
   }
 
   // GET single maritime quotation by ID

@@ -2,8 +2,8 @@
 
 <div class="form-container">
   <div class="form-header">
-    <h1>{{ editId ? (isViewMode ? 'Ver Cotización Marítima' : 'Editar Cotización Marítima') : 'Nueva Cotización Marítima' }}</h1>
-    <p class="hint">{{ editId ? 'Cotización #' + tarifa.details.quotationNumber : 'Ingresa los datos de la cotización marítima.' }}</p>
+    <h1>{{ editId ? (isViewMode ? 'Ver Tarifa Marítima' : 'Editar Tarifa Marítima') : 'Nueva Tarifa Marítima' }}</h1>
+    <p class="hint">{{ editId ? 'Editando tarifa marítima' : 'Ingresa los datos de la tarifa marítima.' }}</p>
   </div>
 
   <div *ngIf="loading" class="alert alert-info">Cargando...</div>
@@ -96,10 +96,6 @@
       <legend>Detalles</legend>
 
       <div class="form-row">
-        <div class="form-group">
-          <label for="quotationNumber">No. Cotización *</label>
-          <input id="quotationNumber" type="text" [(ngModel)]="tarifa.details.quotationNumber" name="quotationNumber" class="form-input" placeholder="Ej: Q-000793" required />
-        </div>
         <div class="form-group">
           <label for="poNumber">No. PO</label>
           <input id="poNumber" type="text" [(ngModel)]="tarifa.details.poNumber" name="poNumber" class="form-input" />
