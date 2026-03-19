@@ -62,6 +62,25 @@ export class ChatMaritimoComponent implements OnInit, OnDestroy, AfterViewChecke
   inputText = '';
   today: Date = new Date();
 
+  quickPrompts: { label: string; text: string }[] = [
+    {
+      label: 'Cotizar contenedor',
+      text: '¿Cuánto cuesta un contenedor <tipo_contenedor> de <puerto_origen> a <puerto_destino>?'
+    },
+    {
+      label: 'Comparar navieras',
+      text: '¿Qué naviera tiene mejor tarifa de <puerto_origen> a <puerto_destino>?'
+    },
+    {
+      label: 'Días libres',
+      text: '¿Cuántos días libres y costos de estadía incluye la ruta <puerto_origen> a <puerto_destino>?'
+    },
+    {
+      label: 'Cotización 40HC',
+      text: '¿Puedes generarme una cotización para un contenedor 40HC desde <puerto_origen> hasta <puerto_destino>, con Naviera?'
+    }
+  ];
+
   ngOnInit(): void {
     this.loadConversationFromStorage();
     if (this.messages.length === 0) {
@@ -149,6 +168,10 @@ export class ChatMaritimoComponent implements OnInit, OnDestroy, AfterViewChecke
         this.cdr.detectChanges();
       }
     });
+  }
+
+  setQuickPrompt(text: string): void {
+    this.inputText = text;
   }
 
   resetConversation(): void {

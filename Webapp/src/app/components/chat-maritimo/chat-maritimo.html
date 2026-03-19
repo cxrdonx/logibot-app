@@ -61,6 +61,25 @@
     <div #scrollEnd></div>
   </div>
 
+  <!-- Quick prompt chips -->
+  <div *ngIf="!isTyping" class="quick-prompts-row">
+    <button
+      *ngFor="let p of quickPrompts"
+      class="quick-prompt-chip"
+      (click)="setQuickPrompt(p.text)"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2c1.3 0 1.9.5 2.5 1"/>
+        <path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.67.97 5.12 2.62 7"/>
+        <path d="M12 10V2"/>
+        <path d="m6.3 12.7 5.7-2.7 5.7 2.7"/>
+      </svg>
+      {{ p.label }}
+    </button>
+  </div>
+
   <!-- Input area -->
   <div class="input-area">
     <input

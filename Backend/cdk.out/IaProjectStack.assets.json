@@ -43,32 +43,32 @@
         }
       }
     },
-    "6dcd376387185e89207c2c29802c9af434e69d6209d0fff1e22b0d778f672de0": {
+    "d56546896d14b0bce6dfb8a4f2e13270499dc2584ef2aabdefe0b3e2ce3140a9": {
       "displayName": "IaProjectStack Template",
       "source": {
         "path": "IaProjectStack.template.json",
         "packaging": "file"
       },
       "destinations": {
-        "current_account-current_region-20007ad0": {
+        "current_account-current_region-d2fe0e75": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "6dcd376387185e89207c2c29802c9af434e69d6209d0fff1e22b0d778f672de0.json",
+          "objectKey": "d56546896d14b0bce6dfb8a4f2e13270499dc2584ef2aabdefe0b3e2ce3140a9.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }
     }
   },
   "dockerImages": {
-    "063c968fce6ed69096ff2300ab7dc8bca4c618431fe5abe88aa94334c9d40bc1": {
+    "60903660fba14848a2b6f13f2621623a103f381258bd77ca3dc1e3ad4a255990": {
       "displayName": "Backend/ChatbotTerrestreHandler/AssetImage",
       "source": {
-        "directory": "asset.063c968fce6ed69096ff2300ab7dc8bca4c618431fe5abe88aa94334c9d40bc1",
+        "directory": "asset.60903660fba14848a2b6f13f2621623a103f381258bd77ca3dc1e3ad4a255990",
         "platform": "linux/amd64"
       },
       "destinations": {
-        "current_account-current_region-e4deb4e8": {
+        "current_account-current_region-712a2ab2": {
           "repositoryName": "cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}",
-          "imageTag": "063c968fce6ed69096ff2300ab7dc8bca4c618431fe5abe88aa94334c9d40bc1",
+          "imageTag": "60903660fba14848a2b6f13f2621623a103f381258bd77ca3dc1e3ad4a255990",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-image-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

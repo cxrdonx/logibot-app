@@ -857,7 +857,7 @@
    "Properties": {
     "Code": {
      "ImageUri": {
-      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:063c968fce6ed69096ff2300ab7dc8bca4c618431fe5abe88aa94334c9d40bc1"
+      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:60903660fba14848a2b6f13f2621623a103f381258bd77ca3dc1e3ad4a255990"
      }
     },
     "Description": "AI chatbot terrestre using Amazon Nova Pro via Bedrock",
@@ -893,7 +893,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "IaProjectStack/Backend/ChatbotTerrestreHandler/Resource",
-    "aws:asset:path": "asset.063c968fce6ed69096ff2300ab7dc8bca4c618431fe5abe88aa94334c9d40bc1",
+    "aws:asset:path": "asset.60903660fba14848a2b6f13f2621623a103f381258bd77ca3dc1e3ad4a255990",
     "aws:asset:dockerfile-path": "Dockerfile",
     "aws:asset:property": "Code.ImageUri"
    }
@@ -1685,7 +1685,7 @@
    "Properties": {
     "Code": {
      "ImageUri": {
-      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:063c968fce6ed69096ff2300ab7dc8bca4c618431fe5abe88aa94334c9d40bc1"
+      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:60903660fba14848a2b6f13f2621623a103f381258bd77ca3dc1e3ad4a255990"
      }
     },
     "Description": "AI chatbot maritimo ALCE V2 using Amazon Nova Pro via Bedrock",
@@ -1721,7 +1721,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "IaProjectStack/Backend/ChatbotMaritimoHandler/Resource",
-    "aws:asset:path": "asset.063c968fce6ed69096ff2300ab7dc8bca4c618431fe5abe88aa94334c9d40bc1",
+    "aws:asset:path": "asset.60903660fba14848a2b6f13f2621623a103f381258bd77ca3dc1e3ad4a255990",
     "aws:asset:dockerfile-path": "Dockerfile",
     "aws:asset:property": "Code.ImageUri"
    }
@@ -4687,7 +4687,7 @@
    "Properties": {
     "Code": {
      "ImageUri": {
-      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:063c968fce6ed69096ff2300ab7dc8bca4c618431fe5abe88aa94334c9d40bc1"
+      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:60903660fba14848a2b6f13f2621623a103f381258bd77ca3dc1e3ad4a255990"
      }
     },
     "Description": "AI chatbot centralizado (terrestre + maritimo) con detección automática de dominio",
@@ -4726,7 +4726,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "IaProjectStack/Backend/ChatbotCentralHandler/Resource",
-    "aws:asset:path": "asset.063c968fce6ed69096ff2300ab7dc8bca4c618431fe5abe88aa94334c9d40bc1",
+    "aws:asset:path": "asset.60903660fba14848a2b6f13f2621623a103f381258bd77ca3dc1e3ad4a255990",
     "aws:asset:dockerfile-path": "Dockerfile",
     "aws:asset:property": "Code.ImageUri"
    }
